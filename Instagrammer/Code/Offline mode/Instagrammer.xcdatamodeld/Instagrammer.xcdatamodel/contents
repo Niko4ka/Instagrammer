@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14460.32" systemVersion="18B75" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="PostEntity" representedClassName="PostEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="author" attributeType="String" defaultValueString="Unknown" syncable="YES"/>
+        <attribute name="authorAvatar" optional="YES" attributeType="Transformable" syncable="YES"/>
+        <attribute name="authorUsername" attributeType="String" defaultValueString="Unknown" syncable="YES"/>
+        <attribute name="createdTime" attributeType="String" defaultValueString="0" syncable="YES"/>
+        <attribute name="currentUserLikesThisPost" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="desc" attributeType="String" defaultValueString="no description" syncable="YES"/>
+        <attribute name="id" attributeType="String" defaultValueString="0" syncable="YES"/>
+        <attribute name="image" attributeType="Transformable" syncable="YES"/>
+        <attribute name="likedByCount" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
+    <entity name="UserEntity" representedClassName="UserEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="avatar" attributeType="Transformable" syncable="YES"/>
+        <attribute name="currentUserFollowsThisUser" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="currentUserIsFollowedByThisUser" optional="YES" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="followedByCount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="followsCount" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="fullname" attributeType="String" defaultValueString="Unknown" syncable="YES"/>
+        <attribute name="id" optional="YES" attributeType="String" defaultValueString="0" syncable="YES"/>
+        <attribute name="username" attributeType="String" defaultValueString="Unknown" syncable="YES"/>
+    </entity>
+    <elements>
+        <element name="PostEntity" positionX="-18" positionY="27" width="128" height="180"/>
+        <element name="UserEntity" positionX="36" positionY="153" width="128" height="165"/>
+    </elements>
+</model>
