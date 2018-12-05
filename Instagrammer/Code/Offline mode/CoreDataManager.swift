@@ -10,27 +10,28 @@ import CoreData
 
 final class CoreDataManager {
     
+    // Variables
     static let instance = CoreDataManager(modelName: "Instagrammer")
     private let modelName: String
-    
+    public let context: NSManagedObjectContext
+
+    // Init
     private init(modelName: String) {
         self.modelName = modelName
-    }
-    
-    private lazy var persistentContainer: NSPersistentContainer = {
         
-        let container = NSPersistentContainer(name: modelName)
+        let persistentContainer: NSPersistentContainer = {
+            
+            let container = NSPersistentContainer(name: modelName)
+            
+            container.loadPersistentStores(completionHandler: { (storeDescription, error) in
+                if let error = error as NSError? {
+                    fatalError("Unresolved error - \(error), \(error.userInfo)")
+                }
+            })
+            return container
+        }()
         
-        container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-            if let error = error as NSError? {
-                fatalError("Unresolved error - \(error), \(error.userInfo)")
-            }
-        })
-        return container
-    }()
-    
-    public func getContext() -> NSManagedObjectContext {
-        return persistentContainer.viewContext
+        context = persistentContainer.viewContext
     }
     
     public func save(context: NSManagedObjectContext) {
@@ -45,28 +46,23 @@ final class CoreDataManager {
     }
     
     public func createObject<T: NSManagedObject>(from entity: T.Type) -> T {
-        let context = getContext()
         let object = NSEntityDescription.insertNewObject(forEntityName: String(describing: entity), into: context) as! T
         return object
     }
     
     public func delete(object: NSManagedObject) {
-        let context = getContext()
         context.delete(object)
         save(context: context)
     }
     
     public func clearAllObjects<T: NSManagedObject>(ofType type: T.Type) {
-        let context = getContext()
         let objects = fetchData(for: type)
         objects.forEach { context.delete($0) }
         save(context: context)
     }
     
     public func fetchData<T: NSManagedObject>(for entity: T.Type, predicate: NSPredicate? = nil) -> [T] {
-        
-        let context = getContext()
-        
+
         let request: NSFetchRequest<T>
         var fetchedResult = [T]()
         
@@ -97,14 +93,12 @@ final class CoreDataManager {
         
         let predicate = NSPredicate(format: "%K == %@", "id", "\(id)")
         let existingPosts = CoreDataManager.instance.fetchData(for: PostEntity.self, predicate: predicate)
-        print("Post exists - \(existingPosts.count)")
-        
+
         return existingPosts.count > 0
     }
     
     public func updatePost(withID id: String, newIntValue: Int, forKey key: String) {
-            
-            let context = getContext()
+
             guard let post = getPost(withID: id) else { return }
             let newValue = Int16(newIntValue)
             post.setValue(newValue, forKey: key)
@@ -113,8 +107,7 @@ final class CoreDataManager {
     }
     
     public func updatePost(withID id: String, newValue: Any, forKey key: String) {
-        
-            let context = getContext()
+
             guard let post = getPost(withID: id) else { return }
             post.setValue(newValue, forKey: key)
             save(context: context)
@@ -122,8 +115,7 @@ final class CoreDataManager {
     }
     
     public func updateUser(withID id: String, newValue: Any, forKey key: String) {
-        
-            let context = getContext()
+
             guard let user = getUser(withID: id) else { return }
             user.setValue(newValue, forKey: key)
             save(context: context)

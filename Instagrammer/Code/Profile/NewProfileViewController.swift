@@ -42,6 +42,8 @@ class NewProfileViewController: UIViewController {
         
         if AuthorizationDataProvider.shared.appIsInOfflineMode {
             
+            // Offline mode customization
+            
             guard let currentUserData = OfflineModeManager.shared.getCurrentUserData() else {
                 Alert.show(message: "Unknown error", on: self)
                 return
@@ -52,33 +54,56 @@ class NewProfileViewController: UIViewController {
             navigation.title = currentUserEntity.username
             postsCollectionView.reloadData()
             Spinner.stop()
-            
         } else {
-            let currentUserRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.usersMe)
-            UsersDataProvider.shared.getUserInfo(request: currentUserRequest, sender: self) { (user) in
-                
-                self.loggedUserID = user.id
-                if self.currentUser == nil {
-                    self.currentUser = user
-                    print("Current user")
-                    
-                } else {
-                    self.navigationItem.rightBarButtonItem = nil
-                    print("Not Current user")
-                }
-                
-                self.findPosts(userId: self.currentUser.id, successCompletion: {
-                    self.showUI()
-                    Spinner.stop()
-                    self.viewNeedToReload = true
-                    
-                    if self.currentUser.id == self.loggedUserID {
-                        DispatchQueue.global().async {
-                            OfflineModeManager.shared.saveCurrentUserData(from: self.currentUser, withPosts: self.posts)
-                        }
+            getUserInfo()
+        }
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+
+        if viewNeedToReload {
+            
+            if currentUser.id == loggedUserID {
+                let currentUserRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.usersMe)
+                UsersDataProvider.shared.getUserInfo(request: currentUserRequest, sender: self) { (user) in
+                    if self.currentUser.followedByCount != user.followedByCount || self.currentUser.followsCount != user.followsCount {
+                        self.currentUser = user
+                        self.postsCollectionView.reloadData()
                     }
-                })
+                }
+                self.findPosts(userId: self.currentUser.id) {
+                    self.postsCollectionView.reloadData()
+                }
             }
+        }
+    }
+    
+    private func getUserInfo() {
+        
+        // Online mode customization
+        
+        let currentUserRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.usersMe)
+        UsersDataProvider.shared.getUserInfo(request: currentUserRequest, sender: self) { (user) in
+            
+            self.loggedUserID = user.id
+            if self.currentUser == nil {
+                self.currentUser = user
+            } else {
+                self.navigationItem.rightBarButtonItem = nil
+            }
+            
+            self.findPosts(userId: self.currentUser.id, successCompletion: {
+                self.showUI()
+                Spinner.stop()
+                self.viewNeedToReload = true
+                
+                if self.currentUser.id == self.loggedUserID {
+                    DispatchQueue.global().async {
+                        OfflineModeManager.shared.saveCurrentUser(from: self.currentUser, withPosts: self.posts)
+                    }
+                }
+            })
         }
     }
     
@@ -103,17 +128,6 @@ class NewProfileViewController: UIViewController {
         }
 
         postsCollectionView.reloadData()
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-
-        if viewNeedToReload {
-            
-            self.findPosts(userId: self.currentUser.id) {
-                self.postsCollectionView.reloadData()
-            }
-        }
     }
     
     @objc func logOutButtonPressed(_ sender: UIBarButtonItem) {

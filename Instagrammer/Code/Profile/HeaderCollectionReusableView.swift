@@ -11,7 +11,6 @@ import UIKit
 class HeaderCollectionReusableView: UICollectionReusableView {
 
     // Outlets
-    
     @IBOutlet weak var avatarImage: UIImageView!
     @IBOutlet weak var fullnameLabel: UILabel!
     @IBOutlet weak var followersButton: UIButton!

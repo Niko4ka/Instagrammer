@@ -89,8 +89,6 @@ final class AuthorizationDataProvider {
     
     public func checkToken(request: URLRequest?, successCompletion: @escaping () -> Void, offlineModeCompletion: @escaping () -> Void) {
         
-        print("checkToken")
-        
         guard let urlRequest = request else {
             print("Bad request")
             return
@@ -105,14 +103,13 @@ final class AuthorizationDataProvider {
             }
             
             if let response = response as? HTTPURLResponse {
-                print("Response of check token - \(response.statusCode)")
                 if response.statusCode == 200 {
                     DispatchQueue.main.async {
                         successCompletion()
                     }
                 } else if response.statusCode == 401 {
                     DispatchQueue.main.async {
-                        print("token is invalid")
+                        print("Token is invalid")
                         KeychainService.shared.deleteToken()
                         Spinner.stop()
                     }

@@ -27,8 +27,7 @@ class PostCollectionViewCell: UICollectionViewCell {
     
     func setPostImage(_ post: PostEntity) {
         
-        postImage.image = post.image as! UIImage
-        
+        postImage.image = post.image as? UIImage
     }
 
 }

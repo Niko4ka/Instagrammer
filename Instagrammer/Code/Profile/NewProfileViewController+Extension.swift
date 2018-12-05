@@ -8,6 +8,8 @@
 
 import UIKit
 
+// MARK: - UICollectionViewDataSource
+
 extension NewProfileViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView,
@@ -18,7 +20,6 @@ extension NewProfileViewController: UICollectionViewDataSource {
         } else {
             return posts.count
         }
-        
     }
     
     func collectionView(_ collectionView: UICollectionView,
@@ -127,7 +128,6 @@ extension NewProfileViewController: UICollectionViewDataSource {
                     CoreDataManager.instance.updateUser(withID: user.id, newValue: user.followsCount, forKey: "followsCount")
                 }
             }
-            
         }
         return header
     }
@@ -147,13 +147,16 @@ extension NewProfileViewController: UICollectionViewDataSource {
     }
 }
 
+// MARK: - UICollectionViewDelegate
+
 extension NewProfileViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         postsCollectionView.deselectItem(at: indexPath, animated: true)
     }
-    
 }
+
+// MARK: - UICollectionViewDelegateFlowLayout
 
 extension NewProfileViewController: UICollectionViewDelegateFlowLayout {
     

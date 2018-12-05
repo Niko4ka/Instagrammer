@@ -12,51 +12,31 @@ final class OfflineModeManager {
     
     static let shared = OfflineModeManager()
     
-    public func savePostsData(from posts: [Post]) {
+    public func createPostStorage(from posts: [Post]) {
         
         CoreDataManager.instance.clearAllObjects(ofType: PostEntity.self)
         
-        let context = CoreDataManager.instance.getContext()
-        
         for post in posts {
-            
-            
-            let postEntity = CoreDataManager.instance.createObject(from: PostEntity.self)
-            postEntity.createdTime = post.createdTime
-            postEntity.currentUserLikesThisPost = post.currentUserLikesThisPost!
-            postEntity.desc = post.description
-            postEntity.id = post.id
-            
-            let postImageUrl = URL(string: post.image)!
-            let postImageData = try? Data(contentsOf: postImageUrl)
-            postEntity.image = UIImage(data: postImageData!)
-            
-            
-            postEntity.likedByCount = Int16(post.likedByCount)
-            
-            let avatarUrl = URL(string: post.authorAvatar)!
-            let avatarData = try? Data(contentsOf: avatarUrl)
-            postEntity.authorAvatar = UIImage(data: avatarData!)
-            
-            postEntity.author = post.author
-            postEntity.authorUsername = post.authorUsername
-            
-            
+            savePost(post)
         }
         
-        CoreDataManager.instance.save(context: context)
-        
-        let savedPosts = CoreDataManager.instance.fetchData(for: PostEntity.self)
-        
-        print("SavedPosts - \(savedPosts.count)")
-
+        CoreDataManager.instance.save(context: CoreDataManager.instance.context)
     }
     
-    public func saveCurrentUserData(from currentUser: User, withPosts posts: [Post]) {
+    public func updatePostStorage(with posts: [Post]) {
+        
+        for post in posts {
+            if !CoreDataManager.instance.postExists(with: post.id) {
+                savePost(post)
+            }
+        }
+        
+        CoreDataManager.instance.save(context: CoreDataManager.instance.context)
+    }
+    
+    public func saveCurrentUser(from currentUser: User, withPosts posts: [Post]) {
         
         CoreDataManager.instance.clearAllObjects(ofType: UserEntity.self)
-        
-        let context = CoreDataManager.instance.getContext()
         
         let currentUserEntity = CoreDataManager.instance.createObject(from: UserEntity.self)
         
@@ -75,36 +55,12 @@ final class OfflineModeManager {
         for post in posts {
             
             if !CoreDataManager.instance.postExists(with: post.id) {
-                
-                print("Такого поста не существует, создаем новый")
-                let postEntity = CoreDataManager.instance.createObject(from: PostEntity.self)
-                postEntity.createdTime = post.createdTime
-                postEntity.currentUserLikesThisPost = post.currentUserLikesThisPost!
-                postEntity.desc = post.description
-                postEntity.id = post.id
-                
-                let postImageUrl = URL(string: post.image)!
-                let postImageData = try? Data(contentsOf: postImageUrl)
-                postEntity.image = UIImage(data: postImageData!)
-                
-                
-                postEntity.likedByCount = Int16(post.likedByCount)
-                
-                let avatarUrl = URL(string: post.authorAvatar)!
-                let avatarData = try? Data(contentsOf: avatarUrl)
-                postEntity.authorAvatar = UIImage(data: avatarData!)
-                
-                postEntity.author = post.author
-                postEntity.authorUsername = post.authorUsername
+                savePost(post)
             }
-
         }
         
-        CoreDataManager.instance.save(context: context)
-        
+        CoreDataManager.instance.save(context: CoreDataManager.instance.context)
     }
-    
-    
     
     public func getCurrentUserData() -> (currentUser: UserEntity, posts: [PostEntity])? {
         
@@ -118,9 +74,27 @@ final class OfflineModeManager {
         
         return (currentUser: currentUser, posts: posts)
     }
+    
+    private func savePost(_ post: Post) {
+        
+        let postEntity = CoreDataManager.instance.createObject(from: PostEntity.self)
+        postEntity.createdTime = post.createdTime
+        postEntity.currentUserLikesThisPost = post.currentUserLikesThisPost!
+        postEntity.desc = post.description
+        postEntity.id = post.id
+        
+        let postImageUrl = URL(string: post.image)!
+        let postImageData = try? Data(contentsOf: postImageUrl)
+        postEntity.image = UIImage(data: postImageData!)
+        
+        postEntity.likedByCount = Int16(post.likedByCount)
+        
+        let avatarUrl = URL(string: post.authorAvatar)!
+        let avatarData = try? Data(contentsOf: avatarUrl)
+        postEntity.authorAvatar = UIImage(data: avatarData!)
+        
+        postEntity.author = post.author
+        postEntity.authorUsername = post.authorUsername
+    }
 
-    // MARK: - Private
-    
-    
-    
 }

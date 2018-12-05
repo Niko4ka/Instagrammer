@@ -19,10 +19,8 @@ class FeedTableViewController: UITableViewController {
     var currentPost: Post!
     var userForDestination: User?
     var usersLikedCurrentPostForDestination: [User] = []
-    let refresh = UIRefreshControl()
     let decoder = JSONDecoder()
-    var abc = false
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -34,20 +32,27 @@ class FeedTableViewController: UITableViewController {
         Spinner.start(from: (tabBarController?.view)!)
         
         if AuthorizationDataProvider.shared.appIsInOfflineMode {
+            
+            // Offline mode customization
+            
             self.posts = CoreDataManager.instance.fetchData(for: PostEntity.self)
-            print("Number of posts in feed - \(posts.count)")
             tableView.reloadData()
             Spinner.stop()
+            
         } else {
+            
+            // Online mode customization
+            
             let feedRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsFeed)
             PostsDataProvider.shared.feed(request: feedRequest, sender: self) { (posts) in
                 self.posts = posts
                 self.feedTableView.reloadData()
                 Spinner.stop()
-                self.addRefresh()
+                
+                // Save data to CoreData
                 
                 DispatchQueue.global().async {
-                    OfflineModeManager.shared.savePostsData(from: self.posts as! [Post])
+                    OfflineModeManager.shared.createPostStorage(from: self.posts as! [Post])
                 }
             }
             
@@ -63,6 +68,12 @@ class FeedTableViewController: UITableViewController {
             self.posts = posts
             self.feedTableView.reloadData()
             Spinner.stop()
+            
+            // Update post data in CoreData
+            
+            DispatchQueue.global().async {
+                OfflineModeManager.shared.updatePostStorage(with: self.posts as! [Post])
+            }
         }
         
         if self.posts.count > 0 {
@@ -71,22 +82,8 @@ class FeedTableViewController: UITableViewController {
             self.view.layoutIfNeeded()
         }
         
-        DispatchQueue.global().async {
-            OfflineModeManager.shared.savePostsData(from: self.posts as! [Post])
-        }
+        
 
-    }
-
-    private func addRefresh() {
-        self.refresh.addTarget(self, action: #selector(refreshData), for: .valueChanged)
-        self.refresh.backgroundColor = UIColor.groupTableViewBackground
-        self.feedTableView.addSubview(refresh)
-    }
-    
-
-    @objc func refreshData() {
-        feedTableView.reloadData()
-        self.refresh.endRefreshing()
     }
 
     // MARK: - Table view data source

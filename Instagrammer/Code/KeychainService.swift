@@ -45,7 +45,7 @@ final class KeychainService {
         return token
     }
     
-    public func saveToken(token: String) -> Bool {
+    public func saveToken(token: String) {
         
         let tokenData = token.data(using: .utf8)
         
@@ -54,15 +54,12 @@ final class KeychainService {
             attributesToUpdate[kSecValueData as String] = tokenData as AnyObject
             
             let query = keychainQuery()
-            let status = SecItemUpdate(query as CFDictionary, attributesToUpdate as CFDictionary)
-            
-            return status == noErr
+            _ = SecItemUpdate(query as CFDictionary, attributesToUpdate as CFDictionary)
         }
         
         var item = keychainQuery()
         item[kSecValueData as String] = tokenData as AnyObject
-        let status = SecItemAdd(item as CFDictionary, nil)
-        return status == noErr
+        _ = SecItemAdd(item as CFDictionary, nil)
     }
     
     

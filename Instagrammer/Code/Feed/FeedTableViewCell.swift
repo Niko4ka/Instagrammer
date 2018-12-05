@@ -53,7 +53,7 @@ class FeedTableViewCell: UITableViewCell {
 
         let postIdJson = ["postID" : post.postID]
         
-        let likePostRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsLike, caseJson: postIdJson)
+        let likePostRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsLike, caseJson: postIdJson as [String : Any])
         PostsDataProvider.shared.setLikeToPost(request: likePostRequest, sender: feedController) { likedByCount in
             post.numberOfLikesButton.setTitle("Likes: \(likedByCount)", for: .normal)
             post.likeButton.tintColor = self.defaultButtonColor
@@ -71,7 +71,7 @@ class FeedTableViewCell: UITableViewCell {
 
         let postIdJson = ["postID" : post.postID]
         
-        let unlikePostRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsUnlike, caseJson: postIdJson)
+        let unlikePostRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsUnlike, caseJson: postIdJson as [String : Any])
         PostsDataProvider.shared.setLikeToPost(request: unlikePostRequest, sender: feedController) { likedByCount in
             post.numberOfLikesButton.setTitle("Likes: \(likedByCount)", for: .normal)
             post.likeButton.tintColor = UIColor.lightGray
@@ -96,7 +96,12 @@ class FeedTableViewCell: UITableViewCell {
                     self.bigLikeImage.alpha = 0
                 }, completion: nil)
             })
-            self.setLikeToPost(self)
+            
+            if self.currentUserLikesThisPost {
+                self.unlikePost(self)
+            } else {
+                self.setLikeToPost(self)
+            }
         }
 
     }
