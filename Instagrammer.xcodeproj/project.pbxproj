@@ -206,6 +206,26 @@
 			path = "Offline mode";
 			sourceTree = "<group>";
 		};
+		4ED0285F21B9AE0600094EAF /* Server Connection */ = {
+			isa = PBXGroup;
+			children = (
+				4E5F388721936D6300AA3ECC /* RequestService.swift */,
+				4E5F38A521963E2C00AA3ECC /* APIRequestCases.swift */,
+				4E5F38AC2197576500AA3ECC /* ServerErrors.swift */,
+			);
+			path = "Server Connection";
+			sourceTree = "<group>";
+		};
+		4ED0286021B9AE2700094EAF /* Additional Services */ = {
+			isa = PBXGroup;
+			children = (
+				4E5F38A92197503700AA3ECC /* Alert.swift */,
+				4ED0284521B02BFC00094EAF /* KeychainService.swift */,
+				4EADCE3D2173BA0A00F3FC6C /* Spinner.swift */,
+			);
+			path = "Additional Services";
+			sourceTree = "<group>";
+		};
 		74B7924B202B3254006BCB41 = {
 			isa = PBXGroup;
 			children = (
@@ -237,13 +257,8 @@
 		74B7927B202B3427006BCB41 /* Code */ = {
 			isa = PBXGroup;
 			children = (
-				4E5F38A92197503700AA3ECC /* Alert.swift */,
-				4ED0284521B02BFC00094EAF /* KeychainService.swift */,
-				4EADCE3D2173BA0A00F3FC6C /* Spinner.swift */,
-				4EDB059F21581A50005B3AA8 /* Main.storyboard */,
-				4E5F388721936D6300AA3ECC /* RequestService.swift */,
-				4E5F38A521963E2C00AA3ECC /* APIRequestCases.swift */,
-				4E5F38AC2197576500AA3ECC /* ServerErrors.swift */,
+				4ED0286021B9AE2700094EAF /* Additional Services */,
+				4ED0285F21B9AE0600094EAF /* Server Connection */,
 				4ED0284A21B4382000094EAF /* Offline mode */,
 				4E5F38AB2197563300AA3ECC /* Data Providers */,
 				4E5F386321924E2000AA3ECC /* Authorization */,
@@ -251,6 +266,7 @@
 				4EADCE352172340200F3FC6C /* Filters */,
 				4EADCE362172341A00F3FC6C /* Profile */,
 				4EADCE33217233B400F3FC6C /* Followers */,
+				4EDB059F21581A50005B3AA8 /* Main.storyboard */,
 				74B79257202B3254006BCB41 /* AppDelegate.swift */,
 				4E7BD81921593A31005347EA /* UICollectionViewExtension.swift */,
 			);
