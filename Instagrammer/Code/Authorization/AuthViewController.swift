@@ -75,9 +75,12 @@ class AuthViewController: UIViewController {
     }
     
     public func showTabBarController() {
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        let initialViewController = storyboard.instantiateViewController(withIdentifier: "tabBarController") as! UITabBarController
-        UIApplication.shared.keyWindow?.rootViewController = initialViewController
+//        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+//        let initialViewController = storyboard.instantiateViewController(withIdentifier: "tabBarController") as! UITabBarController
+        
+        let tabBarController = TabBarController()
+        
+        UIApplication.shared.keyWindow?.rootViewController = tabBarController
     }
     
     private func showWarning() {

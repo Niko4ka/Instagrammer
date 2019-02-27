@@ -13,9 +13,10 @@
         <!--New post-->
         <scene sceneID="AMN-TO-mZf">
             <objects>
-                <collectionViewController id="zHe-Uq-H1w" customClass="NewCollectionViewController" customModule="Instagrammer" customModuleProvider="target" sceneMemberID="viewController">
+                <placeholder placeholderIdentifier="IBFirstResponder" id="a6U-zk-Xgg" userLabel="First Responder" sceneMemberID="firstResponder"/>
+                <collectionViewController storyboardIdentifier="NewCollectionViewController" id="zHe-Uq-H1w" customClass="NewCollectionViewController" customModule="Instagrammer" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="XGA-ql-Yj4">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="iNq-QG-dwT">
@@ -40,7 +41,6 @@
                         <segue destination="5b8-Pc-Pad" kind="show" identifier="showFilters" id="QFj-Q2-uAr"/>
                     </connections>
                 </collectionViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="a6U-zk-Xgg" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="1017" y="1346"/>
         </scene>
@@ -49,17 +49,17 @@
             <objects>
                 <viewController id="5b8-Pc-Pad" customClass="FiltersViewController" customModule="Instagrammer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4uo-j5-I9z">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="6xr-HK-t70">
-                                <rect key="frame" x="0.0" y="64" width="320" height="320"/>
+                                <rect key="frame" x="0.0" y="20" width="320" height="320"/>
                                 <constraints>
                                     <constraint firstAttribute="width" secondItem="6xr-HK-t70" secondAttribute="height" multiplier="1:1" id="MX0-e4-qx2"/>
                                 </constraints>
                             </imageView>
                             <collectionView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" translatesAutoresizingMaskIntoConstraints="NO" id="3HE-5R-AxY">
-                                <rect key="frame" x="0.0" y="384" width="320" height="135"/>
+                                <rect key="frame" x="0.0" y="340" width="320" height="228"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="gXz-gL-mhd">
                                     <size key="itemSize" width="50" height="50"/>
@@ -103,24 +103,24 @@
             <objects>
                 <viewController id="dHY-HN-WFE" customClass="FilterDescriptionViewController" customModule="Instagrammer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Mfz-Do-CV0">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="I4m-3U-vP2">
-                                <rect key="frame" x="16" y="80" width="100" height="100"/>
+                                <rect key="frame" x="16" y="36" width="100" height="100"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="100" id="BJv-z2-Fv2"/>
                                     <constraint firstAttribute="height" constant="100" id="qJp-ga-Ply"/>
                                 </constraints>
                             </imageView>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Add description" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9Nd-hP-YH7">
-                                <rect key="frame" x="16" y="212" width="121" height="21"/>
+                                <rect key="frame" x="16" y="168" width="121" height="21"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="u7g-Kk-h8K">
-                                <rect key="frame" x="16" y="241" width="288" height="30"/>
+                                <rect key="frame" x="16" y="197" width="288" height="30"/>
                                 <nil key="textColor"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="14"/>
                                 <textInputTraits key="textInputTraits"/>
@@ -159,7 +159,7 @@
             <objects>
                 <collectionViewController storyboardIdentifier="NewProfileViewController" id="ye3-Lv-4Ak" customClass="NewProfileViewController" customModule="Instagrammer" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="4lR-0g-3Ft">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="BvP-tc-W5z">
@@ -262,7 +262,7 @@
             <objects>
                 <tableViewController storyboardIdentifier="feedVC" id="GbC-1G-Uu4" customClass="FeedTableViewController" customModule="Instagrammer" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="mso-lb-Wf7">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
+                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <connections>
@@ -351,90 +351,5 @@
             </objects>
             <point key="canvasLocation" x="-1306.4000000000001" y="160.56971514242881"/>
         </scene>
-        <!--Tab Bar Controller-->
-        <scene sceneID="wXr-yv-9Kv">
-            <objects>
-                <tabBarController storyboardIdentifier="tabBarController" autoresizesArchivedViewToFullSize="NO" wantsFullScreenLayout="YES" hidesBottomBarWhenPushed="YES" id="qVs-RP-ODn" sceneMemberID="viewController">
-                    <extendedEdge key="edgesForExtendedLayout"/>
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="xLF-BX-QGS">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                        <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </tabBar>
-                    <connections>
-                        <segue destination="3Hf-Dd-err" kind="relationship" relationship="viewControllers" id="imp-RW-gYX"/>
-                        <segue destination="Ie2-Hc-K6U" kind="relationship" relationship="viewControllers" id="9M1-Oh-ArG"/>
-                        <segue destination="tCv-AP-4IV" kind="relationship" relationship="viewControllers" id="ftM-Mt-7jd"/>
-                    </connections>
-                </tabBarController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="EhG-8R-eA7" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-287" y="161"/>
-        </scene>
-        <!--Feed-->
-        <scene sceneID="QFQ-mZ-FWt">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="3Hf-Dd-err" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Feed" image="feed" id="mMB-BL-nQM"/>
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="lUo-mc-CKO">
-                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="GbC-1G-Uu4" kind="relationship" relationship="rootViewController" id="BzV-1y-WOM"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="g9X-ek-SW6" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1017" y="-391"/>
-        </scene>
-        <!--New-->
-        <scene sceneID="Gz5-X7-0jz">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="Ie2-Hc-K6U" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="New" image="plus" id="KSO-g7-zvO"/>
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="g8U-gm-ze4">
-                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="zHe-Uq-H1w" kind="relationship" relationship="rootViewController" id="lqV-aZ-ty2"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="fAy-Jl-U6i" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-287" y="1347"/>
-        </scene>
-        <!--Profile-->
-        <scene sceneID="KWV-5Y-zxn">
-            <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="tCv-AP-4IV" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="Profile" image="profile" id="LLo-gl-jub"/>
-                    <toolbarItems/>
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="n42-2V-XUG">
-                        <rect key="frame" x="0.0" y="20" width="320" height="44"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                    <nil name="viewControllers"/>
-                    <connections>
-                        <segue destination="ye3-Lv-4Ak" kind="relationship" relationship="rootViewController" id="7H3-be-VkD"/>
-                    </connections>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="S1H-M7-zmv" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1017" y="578"/>
-        </scene>
     </scenes>
-    <resources>
-        <image name="feed" width="40" height="40"/>
-        <image name="plus" width="20" height="20"/>
-        <image name="profile" width="40" height="40"/>
-    </resources>
-    <inferredMetricsTieBreakers>
-        <segue reference="3eV-WI-cdJ"/>
-    </inferredMetricsTieBreakers>
 </document>
