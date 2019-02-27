@@ -9,20 +9,18 @@ class HeaderCollectionReusableView: UICollectionReusableView {
     @IBOutlet weak var followingButton: UIButton!
     @IBOutlet weak var followThisUserButton: UIButton!
     
-    var followThisUserButtonPressed: (()->())?
-    var followersButtonPressed: (()->())?
-    var followingButtonPressed: (()->())?
+    weak var delegate: NewProfileViewController?
     
     @IBAction func followThisUserButtonPressed(_ sender: UIButton) {
-        followThisUserButtonPressed?()
+        delegate?.followThisUserButtonPressed()
     }
     
     @IBAction func followersButtonPressed(_ sender: UIButton) {
-        followersButtonPressed?()
+        delegate?.followersButtonPressed()
     }
     
     @IBAction func followingButtonPressed(_ sender: UIButton) {
-        followingButtonPressed?()
+        delegate?.followingButtonPressed()
     }
     
 }

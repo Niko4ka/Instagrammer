@@ -19,6 +19,8 @@ extension NewProfileViewController: UICollectionViewDataSource {
                         at indexPath: IndexPath) -> UICollectionReusableView {
         
         let header = postsCollectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "profileHeader", for: indexPath) as! HeaderCollectionReusableView
+        header.delegate = self
+        self.header = header
         
         if AuthorizationDataProvider.shared.appIsInOfflineMode {
             
@@ -71,56 +73,6 @@ extension NewProfileViewController: UICollectionViewDataSource {
             }
         }
         
-        header.followersButtonPressed = {
-            if AuthorizationDataProvider.shared.appIsInOfflineMode {
-                Alert.showOfflineModeMessage(on: self)
-            } else {
-                self.performSegue(withIdentifier: "showFollowers", sender: nil)
-            }
-        }
-        
-        header.followingButtonPressed = {
-            if AuthorizationDataProvider.shared.appIsInOfflineMode {
-                Alert.showOfflineModeMessage(on: self)
-            } else {
-                self.performSegue(withIdentifier: "showFollowing", sender: nil)
-            }
-        }
-        
-        header.followThisUserButtonPressed = {
-            
-            if self.currentUser.currentUserFollowsThisUser {
-                
-                let unfollowJson = ["userID": self.currentUser.id]
-                let unfollowRequest = RequestService.shared.createRequest(currentCase: .usersUnfollow, caseJson: unfollowJson)
-                UsersDataProvider.shared.getUserInfo(request: unfollowRequest, sender: self, successCompletion: { (user) in
-                    self.currentUser = user
-                    header.followThisUserButton.setTitle("Follow", for: .normal)
-                    header.followThisUserButton.sizeToFit()
-                    header.followersButton.setTitle("Followers: \(self.currentUser.followedByCount)", for: .normal)
-                })
-                
-            } else {
-                let followJson = ["userID": self.currentUser.id]
-                let followRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.usersFollow, caseJson: followJson)
-                UsersDataProvider.shared.getUserInfo(request: followRequest, sender: self, successCompletion: { (user) in
-                    self.currentUser = user
-                    header.followThisUserButton.setTitle("Unfollow", for: .normal)
-                    header.followThisUserButton.sizeToFit()
-                    header.followersButton.setTitle("Followers: \(self.currentUser.followedByCount)", for: .normal)
-                })
-            }
-            
-            // Update data in CoreData
-            
-            let currentUserRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.usersMe)
-            UsersDataProvider.shared.getUserInfo(request: currentUserRequest, sender: self) { (user) in
-                DispatchQueue.global().async {
-                    CoreDataManager.instance.updateUser(withID: user.id, newValue: user.followedByCount, forKey: "followedByCount")
-                    CoreDataManager.instance.updateUser(withID: user.id, newValue: user.followsCount, forKey: "followsCount")
-                }
-            }
-        }
         return header
     }
     

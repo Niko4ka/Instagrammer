@@ -6,6 +6,7 @@ class NewProfileViewController: UIViewController {
     // Outlets
     @IBOutlet weak var postsCollectionView: UICollectionView!
     @IBOutlet weak var navigation: UINavigationItem!
+    weak var header: HeaderCollectionReusableView?
     
     // Data transfer variables
     var currentUser: User!
@@ -121,6 +122,68 @@ class NewProfileViewController: UIViewController {
 
         postsCollectionView.reloadData()
     }
+    
+    // Follow/Unfollow functions
+    
+    func followThisUserButtonPressed() {
+        
+            if currentUser.currentUserFollowsThisUser {
+                
+                let unfollowJson = ["userID": self.currentUser.id]
+                let unfollowRequest = RequestService.shared.createRequest(currentCase: .usersUnfollow, caseJson: unfollowJson)
+                UsersDataProvider.shared.getUserInfo(request: unfollowRequest, sender: self, successCompletion: { (user) in
+                    self.currentUser = user
+                    if let header = self.header {
+                        header.followThisUserButton.setTitle("Follow", for: .normal)
+                        header.followThisUserButton.sizeToFit()
+                        header.followersButton.setTitle("Followers: \(self.currentUser.followedByCount)", for: .normal)
+                    }
+                })
+                
+            } else {
+                let followJson = ["userID": self.currentUser.id]
+                let followRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.usersFollow, caseJson: followJson)
+                UsersDataProvider.shared.getUserInfo(request: followRequest, sender: self, successCompletion: { (user) in
+                    self.currentUser = user
+                    
+                    if let header = self.header {
+                        header.followThisUserButton.setTitle("Unfollow", for: .normal)
+                        header.followThisUserButton.sizeToFit()
+                        header.followersButton.setTitle("Followers: \(self.currentUser.followedByCount)", for: .normal)
+                    }
+                })
+            }
+            
+            // Update data in CoreData
+            
+            let currentUserRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.usersMe)
+            UsersDataProvider.shared.getUserInfo(request: currentUserRequest, sender: self) { (user) in
+                DispatchQueue.global().async {
+                    CoreDataManager.instance.updateUser(withID: user.id, newValue: user.followedByCount, forKey: "followedByCount")
+                    CoreDataManager.instance.updateUser(withID: user.id, newValue: user.followsCount, forKey: "followsCount")
+                }
+            }
+    }
+    
+    func followersButtonPressed() {
+        
+        if AuthorizationDataProvider.shared.appIsInOfflineMode {
+            Alert.showOfflineModeMessage(on: self)
+        } else {
+            performSegue(withIdentifier: "showFollowers", sender: nil)
+        }
+        
+    }
+    
+    func followingButtonPressed() {
+        
+        if AuthorizationDataProvider.shared.appIsInOfflineMode {
+            Alert.showOfflineModeMessage(on: self)
+        } else {
+            performSegue(withIdentifier: "showFollowing", sender: nil)
+        }
+    }
+    
     
     @objc func logOutButtonPressed(_ sender: UIBarButtonItem) {
 
