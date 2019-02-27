@@ -1,29 +1,31 @@
 import CoreData
+import UIKit
 
 final class CoreDataManager {
     
     // Variables
     static let instance = CoreDataManager(modelName: "Instagrammer")
     private let modelName: String
+    let persistentContainer: NSPersistentContainer
     public let context: NSManagedObjectContext
+//    public let mainManagedObjectContext: NSManagedObjectContext
+//    public let childManagedObjectContext: NSManagedObjectContext
 
     // Init
     private init(modelName: String) {
         self.modelName = modelName
         
-        let persistentContainer: NSPersistentContainer = {
-            
-            let container = NSPersistentContainer(name: modelName)
-            
-            container.loadPersistentStores(completionHandler: { (storeDescription, error) in
-                if let error = error as NSError? {
-                    fatalError("Unresolved error - \(error), \(error.userInfo)")
-                }
-            })
-            return container
-        }()
-        
+        persistentContainer = NSPersistentContainer(name: modelName)
+        persistentContainer.loadPersistentStores(completionHandler: { (storeDescription, error) in
+            if let error = error as NSError? {
+                fatalError("Unresolved error - \(error), \(error.userInfo)")
+            }
+        })
+
         context = persistentContainer.viewContext
+//        mainManagedObjectContext = persistentContainer.viewContext
+//        childManagedObjectContext = NSManagedObjectContext(concurrencyType: .privateQueueConcurrencyType)
+//        childManagedObjectContext.parent = mainManagedObjectContext
     }
     
     public func save(context: NSManagedObjectContext) {
@@ -37,7 +39,26 @@ final class CoreDataManager {
         }
     }
     
+    public func saveInBackgroundContext(handler: @escaping (NSManagedObjectContext)->()) {
+
+        persistentContainer.performBackgroundTask { (backgroundContext) in
+            
+            handler(backgroundContext)
+            
+            do {
+                try backgroundContext.save()
+            } catch {
+                fatalError("Failure to save context: \(error)")
+            }
+        }
+    }
+    
     public func createObject<T: NSManagedObject>(from entity: T.Type) -> T {
+        let object = NSEntityDescription.insertNewObject(forEntityName: String(describing: entity), into: context) as! T
+        return object
+    }
+    
+    public func createObject<T: NSManagedObject>(from entity: T.Type, inContext context: NSManagedObjectContext) -> T {
         let object = NSEntityDescription.insertNewObject(forEntityName: String(describing: entity), into: context) as! T
         return object
     }
