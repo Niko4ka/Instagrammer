@@ -2,7 +2,7 @@ import UIKit
 
 // MARK: - UICollectionViewDataSource
 
-extension NewProfileViewController: UICollectionViewDataSource {
+extension ProfileViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView,
                         numberOfItemsInSection section: Int) -> Int {
@@ -93,7 +93,7 @@ extension NewProfileViewController: UICollectionViewDataSource {
 
 // MARK: - UICollectionViewDelegate
 
-extension NewProfileViewController: UICollectionViewDelegate {
+extension ProfileViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         postsCollectionView.deselectItem(at: indexPath, animated: true)
@@ -102,7 +102,7 @@ extension NewProfileViewController: UICollectionViewDelegate {
 
 // MARK: - UICollectionViewDelegateFlowLayout
 
-extension NewProfileViewController: UICollectionViewDelegateFlowLayout {
+extension ProfileViewController: UICollectionViewDelegateFlowLayout {
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         

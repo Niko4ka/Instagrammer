@@ -1,6 +1,6 @@
 import UIKit
 
-class NewCollectionViewCell: UICollectionViewCell {
+class NewPostCollectionViewCell: UICollectionViewCell {
     
     var photoImage = UIImageView()
     

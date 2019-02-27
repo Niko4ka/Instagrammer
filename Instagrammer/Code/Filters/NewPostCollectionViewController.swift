@@ -1,7 +1,7 @@
 import UIKit
 import Foundation
 
-class NewCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
+class NewPostCollectionViewController: UICollectionViewController, UICollectionViewDelegateFlowLayout {
 
     var photos: [UIImage] = []
     var cellPhoto: UIImageView!
@@ -10,7 +10,7 @@ class NewCollectionViewController: UICollectionViewController, UICollectionViewD
         super.viewDidLoad()
         
         setPhotoArray()
-        collectionView.register(cellType: NewCollectionViewCell.self, nib: false)
+        collectionView.register(cellType: NewPostCollectionViewCell.self, nib: false)
     }
 
     // MARK: UICollectionViewDataSource
@@ -24,7 +24,7 @@ class NewCollectionViewController: UICollectionViewController, UICollectionViewD
     }
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = collectionView.dequeueCell(of: NewCollectionViewCell.self, for: indexPath)
+        let cell = collectionView.dequeueCell(of: NewPostCollectionViewCell.self, for: indexPath)
         cell.configureCellWith(photos[indexPath.item])
 
         return cell
@@ -58,7 +58,7 @@ class NewCollectionViewController: UICollectionViewController, UICollectionViewD
     // MARK: UICollectionViewDelegate
     
     override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        let cell = collectionView.cellForItem(at: indexPath) as? NewCollectionViewCell
+        let cell = collectionView.cellForItem(at: indexPath) as? NewPostCollectionViewCell
         cellPhoto = cell?.photoImage
         performSegue(withIdentifier: "showFilters", sender: nil)
     }

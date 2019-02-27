@@ -1,7 +1,7 @@
 import UIKit
 import Kingfisher
 
-class NewProfileViewController: UIViewController {
+class ProfileViewController: UIViewController {
     
     // Outlets
     @IBOutlet weak var postsCollectionView: UICollectionView!
@@ -92,9 +92,8 @@ class NewProfileViewController: UIViewController {
                 self.viewNeedToReload = true
                 
                 if self.currentUser.id == self.loggedUserID {
-                    DispatchQueue.global().async {
-                        OfflineModeManager.shared.saveCurrentUser(from: self.currentUser, withPosts: self.posts)
-                    }
+                    
+                    OfflineModeManager.shared.saveCurrentUser(from: self.currentUser, withPosts: self.posts)
                 }
             })
         }

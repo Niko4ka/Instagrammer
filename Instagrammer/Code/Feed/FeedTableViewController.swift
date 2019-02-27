@@ -93,7 +93,7 @@ class FeedTableViewController: UITableViewController {
         UsersDataProvider.shared.getUserInfo(request: getUserRequest, sender: self, successCompletion: { (user) in
             Spinner.stop()
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
-            if let profile = storyboard.instantiateViewController(withIdentifier: "NewProfileViewController") as? NewProfileViewController {
+            if let profile = storyboard.instantiateViewController(withIdentifier: "ProfileViewController") as? ProfileViewController {
                 profile.currentUser = user
                 self.navigationController?.pushViewController(profile, animated: true)
             }

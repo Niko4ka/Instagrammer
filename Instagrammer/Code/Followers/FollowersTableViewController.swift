@@ -112,7 +112,7 @@ class FollowersTableViewController: UITableViewController {
     
     func showProfile(of follower: User) {
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let profile = storyboard.instantiateViewController(withIdentifier: "NewProfileViewController") as? NewProfileViewController {
+        if let profile = storyboard.instantiateViewController(withIdentifier: "ProfileViewController") as? ProfileViewController {
             profile.currentUser = follower
             navigationController?.pushViewController(profile, animated: true)
         }
