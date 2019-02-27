@@ -1,11 +1,3 @@
-//
-//  CoreDataManager.swift
-//  Instagrammer
-//
-//  Created by Вероника Данилова on 02/12/2018.
-//  Copyright © 2018 e-Legion. All rights reserved.
-//
-
 import CoreData
 
 final class CoreDataManager {

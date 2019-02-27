@@ -1,11 +1,3 @@
-//
-//  NewProfileViewController+Extension.swift
-//  Instagrammer
-//
-//  Created by Вероника Данилова on 04/12/2018.
-//  Copyright © 2018 e-Legion. All rights reserved.
-//
-
 import UIKit
 
 // MARK: - UICollectionViewDataSource

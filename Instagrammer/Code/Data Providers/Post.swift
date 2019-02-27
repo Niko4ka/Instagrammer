@@ -1,11 +1,3 @@
-//
-//  Post.swift
-//  Course2FinalTask
-//
-//  Created by Вероника Данилова on 09.11.2018.
-//  Copyright © 2018 e-Legion. All rights reserved.
-//
-
 import Foundation
 
 struct Post: Codable {

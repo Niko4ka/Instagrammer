@@ -1,11 +1,3 @@
-//
-//  FollowerTableViewCell.swift
-//  Course2FinalTask
-//
-//  Created by Вероника Данилова on 25.09.2018.
-//  Copyright © 2018 e-Legion. All rights reserved.
-//
-
 import UIKit
 import Kingfisher
 
