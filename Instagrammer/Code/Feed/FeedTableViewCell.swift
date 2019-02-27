@@ -34,49 +34,48 @@ class FeedTableViewCell: UITableViewCell {
             }
         } else {
             if currentUserLikesThisPost {
-                unlikePost(self)
+                unlikePost()
             } else {
-                setLikeToPost(self)
+                likePost()
             }
         }
     }
     
-    public func setLikeToPost(_ post: FeedTableViewCell) {
+    public func likePost() {
         
         guard let delegate = delegate else { return }
 
-        let postIdJson = ["postID" : post.postID]
+        let postIdJson = ["postID" : postID]
         
         let likePostRequest = RequestService.shared.createRequest(currentCase: .postsLike, caseJson: postIdJson as [String : Any])
         PostsDataProvider.shared.setLikeToPost(request: likePostRequest, sender: delegate) { likedByCount in
-            post.numberOfLikesButton.setTitle("Likes: \(likedByCount)", for: .normal)
-            post.likeButton.tintColor = self.defaultButtonColor
+            self.numberOfLikesButton.setTitle("Likes: \(likedByCount)", for: .normal)
+            self.likeButton.tintColor = self.defaultButtonColor
             self.currentUserLikesThisPost = true
-            
-            DispatchQueue.global().async {
-                CoreDataManager.instance.updatePost(withID: post.postID, newIntValue: likedByCount, forKey: "likedByCount")
-                CoreDataManager.instance.updatePost(withID: post.postID, newValue: self.currentUserLikesThisPost, forKey: "currentUserLikesThisPost")
-            }
+            self.updateLikeStatusInCoreData(likedByCount: likedByCount)
         }
 
     }
     
-    public func unlikePost(_ post: FeedTableViewCell) {
+    public func unlikePost() {
         
         guard let delegate = delegate else { return }
 
-        let postIdJson = ["postID" : post.postID]
+        let postIdJson = ["postID" : postID]
         
         let unlikePostRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsUnlike, caseJson: postIdJson as [String : Any])
         PostsDataProvider.shared.setLikeToPost(request: unlikePostRequest, sender: delegate) { likedByCount in
-            post.numberOfLikesButton.setTitle("Likes: \(likedByCount)", for: .normal)
-            post.likeButton.tintColor = UIColor.lightGray
+            self.numberOfLikesButton.setTitle("Likes: \(likedByCount)", for: .normal)
+            self.likeButton.tintColor = UIColor.lightGray
             self.currentUserLikesThisPost = false
-            
-            DispatchQueue.global().async {
-                CoreDataManager.instance.updatePost(withID: post.postID, newIntValue: likedByCount, forKey: "likedByCount")
-                CoreDataManager.instance.updatePost(withID: post.postID, newValue: self.currentUserLikesThisPost, forKey: "currentUserLikesThisPost")
-            }
+            self.updateLikeStatusInCoreData(likedByCount: likedByCount)
+        }
+    }
+    
+    private func updateLikeStatusInCoreData(likedByCount: Int) {
+        DispatchQueue.global().async {
+            CoreDataManager.instance.updatePost(withID: self.postID, newIntValue: likedByCount, forKey: "likedByCount")
+            CoreDataManager.instance.updatePost(withID: self.postID, newValue: self.currentUserLikesThisPost, forKey: "currentUserLikesThisPost")
         }
     }
     
@@ -96,9 +95,9 @@ class FeedTableViewCell: UITableViewCell {
             })
             
             if currentUserLikesThisPost {
-                unlikePost(self)
+                unlikePost()
             } else {
-                setLikeToPost(self)
+                likePost()
             }
         }
 
@@ -232,9 +231,8 @@ class FeedTableViewCell: UITableViewCell {
             
             let getPostRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsId)
             PostsDataProvider.shared.getPostInfo(request: getPostRequest, sender: delegate) { (post) in
-                RequestService.shared.userId = post.author
                 DispatchQueue.main.async {
-                    self.delegate?.addPerformSegueAction()
+                    self.delegate?.showProfile(of: post.author)
                 }
             }
         }
@@ -256,7 +254,7 @@ class FeedTableViewCell: UITableViewCell {
                 RequestService.shared.userId = post.author
                 
                 DispatchQueue.main.async {
-                    delegate.addUsersLikedPostSegueAction(cell: self)
+                    delegate.showUsersLikedPost(in: self)
                 }
             }
         }

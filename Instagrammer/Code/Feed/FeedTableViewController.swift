@@ -26,7 +26,6 @@ class FeedTableViewController: UITableViewController {
             // Offline mode customization
             
             self.posts = CoreDataManager.instance.fetchData(for: PostEntity.self)
-            tableView.reloadData()
             Spinner.stop()
             
         } else {
@@ -76,36 +75,32 @@ class FeedTableViewController: UITableViewController {
         Spinner.start(from: (self.tabBarController?.view)!)
     }
     
-    func addUsersLikedPostSegueAction(cell: FeedTableViewCell) {
+    // MARK: - Segues
+    
+    func showUsersLikedPost(in cell: FeedTableViewCell) {
         self.currentPost = cell.currentPost
         let usersLikePostRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsIdLikes)
         PostsDataProvider.shared.usersLikePost(request: usersLikePostRequest, sender: self, successCompletion: { (users) in
-            self.showUsersLikedPost(users)
+            self.showUsers(users)
         })
     }
-    
-    func addPerformSegueAction() {
+
+    func showProfile(of userId: String) {
+        
+        RequestService.shared.userId = userId
         
         let getUserRequest = RequestService.shared.createRequest(currentCase: .usersId)
         UsersDataProvider.shared.getUserInfo(request: getUserRequest, sender: self, successCompletion: { (user) in
             Spinner.stop()
-            self.showProfile(of: user)
+            let storyboard = UIStoryboard(name: "Main", bundle: nil)
+            if let profile = storyboard.instantiateViewController(withIdentifier: "NewProfileViewController") as? NewProfileViewController {
+                profile.currentUser = user
+                self.navigationController?.pushViewController(profile, animated: true)
+            }
         })
     }
     
-    // MARK: - Segues
-    
-    func showProfile(of user: User) {
-        
-        let storyboard = UIStoryboard(name: "Main", bundle: nil)
-        if let profile = storyboard.instantiateViewController(withIdentifier: "NewProfileViewController") as? NewProfileViewController {
-            profile.currentUser = user
-            navigationController?.pushViewController(profile, animated: true)
-        }
-        
-    }
-    
-    func showUsersLikedPost(_ users: [User]) {
+    func showUsers(_ users: [User]) {
         let destination = FollowersTableViewController()
         destination.usersLikedPost = users
         destination.entryPoint = "usersLikedPost"
