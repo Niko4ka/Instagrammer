@@ -3,27 +3,19 @@ import UIKit
 final class OfflineModeManager {
     
     static let shared = OfflineModeManager()
+    private let context = CoreDataManager.instance.context
     
     public func createPostStorage(from posts: [Post]) {
         
         CoreDataManager.instance.clearAllObjects(ofType: PostEntity.self)
-        
-        for post in posts {
-            savePost(post)
-        }
-        
-        CoreDataManager.instance.save(context: CoreDataManager.instance.context)
+        posts.forEach {savePost($0)}
+        CoreDataManager.instance.save(context: context)
     }
     
     public func updatePostStorage(with posts: [Post]) {
         
-        for post in posts {
-            if !CoreDataManager.instance.postExists(with: post.id) {
-                savePost(post)
-            }
-        }
-        
-        CoreDataManager.instance.save(context: CoreDataManager.instance.context)
+        saveNotExistingPosts(posts)
+        CoreDataManager.instance.save(context: context)
     }
     
     public func saveCurrentUser(from currentUser: User, withPosts posts: [Post]) {
@@ -44,14 +36,9 @@ final class OfflineModeManager {
         currentUserEntity.id = currentUser.id
         currentUserEntity.username = currentUser.username
         
-        for post in posts {
-            
-            if !CoreDataManager.instance.postExists(with: post.id) {
-                savePost(post)
-            }
-        }
+        saveNotExistingPosts(posts)
         
-        CoreDataManager.instance.save(context: CoreDataManager.instance.context)
+        CoreDataManager.instance.save(context: context)
     }
     
     public func getCurrentUserData() -> (currentUser: UserEntity, posts: [PostEntity])? {
@@ -87,6 +74,14 @@ final class OfflineModeManager {
         
         postEntity.author = post.author
         postEntity.authorUsername = post.authorUsername
+    }
+    
+    private func saveNotExistingPosts(_ posts: [Post]) {
+        for post in posts {
+            if !CoreDataManager.instance.postExists(with: post.id) {
+                savePost(post)
+            }
+        }
     }
 
 }

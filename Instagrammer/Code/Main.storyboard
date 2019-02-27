@@ -34,14 +34,9 @@
                                 </view>
                             </collectionViewCell>
                         </cells>
-                        <connections>
-                            <outlet property="dataSource" destination="zHe-Uq-H1w" id="Hbj-0l-0l0"/>
-                            <outlet property="delegate" destination="zHe-Uq-H1w" id="Gyo-oF-ydj"/>
-                        </connections>
                     </collectionView>
                     <navigationItem key="navigationItem" title="New post" id="52I-NL-lfb"/>
                     <connections>
-                        <outlet property="newPostCollectionView" destination="XGA-ql-Yj4" id="ev5-bu-9g8"/>
                         <segue destination="5b8-Pc-Pad" kind="show" identifier="showFilters" id="QFj-Q2-uAr"/>
                     </connections>
                 </collectionViewController>
@@ -460,7 +455,7 @@
         <image name="profile" width="40" height="40"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="l3M-gm-BZi"/>
+        <segue reference="3eV-WI-cdJ"/>
         <segue reference="Ekb-P4-O0u"/>
     </inferredMetricsTieBreakers>
 </document>

@@ -21,7 +21,7 @@ class FilterCollectionViewCell: UICollectionViewCell {
         activityIndicator.backgroundColor = UIColor(red: 0, green: 0, blue: 0, alpha: 0.7)
     }
     
-    public func setFilterToCell(_ filter: String, _ photo: UIImage) {
+    public func set(filter: String, toPhoto photo: UIImage) {
         
         activityIndicator.isHidden = false
         activityIndicator.startAnimating()

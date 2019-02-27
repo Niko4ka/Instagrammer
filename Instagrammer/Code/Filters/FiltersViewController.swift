@@ -69,7 +69,7 @@ extension FiltersViewController: UICollectionViewDelegate, UICollectionViewDataS
         
         let cell = filtersCollectionView.dequeueCell(of: FilterCollectionViewCell.self, for: indexPath)
         cell.filterImage.image = cellThumbnailPhoto
-        cell.setFilterToCell(filterProvider.filterArray[indexPath.item], cellThumbnailPhoto)
+        cell.set(filter: filterProvider.filterArray[indexPath.item], toPhoto: cellThumbnailPhoto)
         return cell
     }
     

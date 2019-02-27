@@ -10,7 +10,7 @@ class NewCollectionViewCell: UICollectionViewCell {
         self.addSubview(photoImage)
     }
     
-    func setPhotoToCell(_ photo: UIImage) {
+    func configureCellWith(_ photo: UIImage) {
        photoImage.image = photo
     }
 }

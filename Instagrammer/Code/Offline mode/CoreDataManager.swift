@@ -95,7 +95,6 @@ final class CoreDataManager {
             let newValue = Int16(newIntValue)
             post.setValue(newValue, forKey: key)
             save(context: context)
-
     }
     
     public func updatePost(withID id: String, newValue: Any, forKey key: String) {
@@ -103,7 +102,6 @@ final class CoreDataManager {
             guard let post = getPost(withID: id) else { return }
             post.setValue(newValue, forKey: key)
             save(context: context)
-
     }
     
     public func updateUser(withID id: String, newValue: Any, forKey key: String) {
