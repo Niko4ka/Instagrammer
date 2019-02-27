@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14313.18" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="QOd-Ma-5ZU">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="QOd-Ma-5ZU">
     <device id="retina4_0" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14283.14"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -13,7 +13,7 @@
         <!--New post-->
         <scene sceneID="AMN-TO-mZf">
             <objects>
-                <collectionViewController id="zHe-Uq-H1w" customClass="NewCollectionViewController" customModule="Course2FinalTask" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController id="zHe-Uq-H1w" customClass="NewCollectionViewController" customModule="Instagrammer" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="XGA-ql-Yj4">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -25,7 +25,7 @@
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells>
-                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" reuseIdentifier="newPostCell" id="V5R-AK-SaQ" customClass="NewCollectionViewCell" customModule="Course2FinalTask" customModuleProvider="target">
+                            <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" reuseIdentifier="newPostCell" id="V5R-AK-SaQ" customClass="NewCollectionViewCell" customModule="Instagrammer" customModuleProvider="target">
                                 <rect key="frame" x="0.0" y="0.0" width="122" height="109"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
@@ -52,7 +52,7 @@
         <!--Filters-->
         <scene sceneID="FcW-6L-7oD">
             <objects>
-                <viewController id="5b8-Pc-Pad" customClass="FiltersViewController" customModule="Course2FinalTask" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="5b8-Pc-Pad" customClass="FiltersViewController" customModule="Instagrammer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="4uo-j5-I9z">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -106,7 +106,7 @@
         <!--Filter Description View Controller-->
         <scene sceneID="5hv-aw-wsc">
             <objects>
-                <viewController id="dHY-HN-WFE" customClass="FilterDescriptionViewController" customModule="Course2FinalTask" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="dHY-HN-WFE" customClass="FilterDescriptionViewController" customModule="Instagrammer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Mfz-Do-CV0">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="519"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -162,18 +162,13 @@
         <!--Followers Table View Controller-->
         <scene sceneID="o9G-t5-tk8">
             <objects>
-                <tableViewController storyboardIdentifier="FollowersTableViewController" id="4KU-mD-2RJ" customClass="FollowersTableViewController" customModule="Course2FinalTask" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="FollowersTableViewController" id="4KU-mD-2RJ" customClass="FollowersTableViewController" customModule="Instagrammer" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="hmf-Wv-hlt">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <connections>
-                            <outlet property="dataSource" destination="4KU-mD-2RJ" id="dBj-sd-nUc"/>
-                            <outlet property="delegate" destination="4KU-mD-2RJ" id="LT0-li-S2i"/>
-                        </connections>
                     </tableView>
                     <connections>
-                        <outlet property="followersTableView" destination="hmf-Wv-hlt" id="esn-RX-bsh"/>
                         <segue destination="ye3-Lv-4Ak" kind="show" identifier="showFollowerProfile" id="l3M-gm-BZi"/>
                     </connections>
                 </tableViewController>
@@ -184,7 +179,7 @@
         <!--New Profile View Controller-->
         <scene sceneID="rgF-EC-oaa">
             <objects>
-                <collectionViewController id="ye3-Lv-4Ak" customClass="NewProfileViewController" customModule="Course2FinalTask" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController id="ye3-Lv-4Ak" customClass="NewProfileViewController" customModule="Instagrammer" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="4lR-0g-3Ft">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -196,7 +191,7 @@
                             <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                         </collectionViewFlowLayout>
                         <cells/>
-                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="profileHeader" id="sNP-tQ-o1a" customClass="HeaderCollectionReusableView" customModule="Course2FinalTask" customModuleProvider="target">
+                        <collectionReusableView key="sectionHeaderView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" misplaced="YES" insetsLayoutMarginsFromSafeArea="NO" reuseIdentifier="profileHeader" id="sNP-tQ-o1a" customClass="HeaderCollectionReusableView" customModule="Instagrammer" customModuleProvider="target">
                             <rect key="frame" x="0.0" y="0.0" width="320" height="96"/>
                             <autoresizingMask key="autoresizingMask"/>
                             <subviews>
@@ -289,7 +284,7 @@
         <!--Feed-->
         <scene sceneID="rfp-K4-GXw">
             <objects>
-                <tableViewController storyboardIdentifier="feedVC" id="GbC-1G-Uu4" customClass="FeedTableViewController" customModule="Course2FinalTask" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController storyboardIdentifier="feedVC" id="GbC-1G-Uu4" customClass="FeedTableViewController" customModule="Instagrammer" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="mso-lb-Wf7">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -313,7 +308,7 @@
         <!--Auth View Controller-->
         <scene sceneID="Ahk-fk-L1N">
             <objects>
-                <viewController storyboardIdentifier="authVC" id="QOd-Ma-5ZU" customClass="AuthViewController" customModule="Course2FinalTask" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="authVC" id="QOd-Ma-5ZU" customClass="AuthViewController" customModule="Instagrammer" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sj7-Eb-i8C">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -460,12 +455,12 @@
         </scene>
     </scenes>
     <resources>
-        <image name="feed" width="25" height="25"/>
-        <image name="plus" width="25" height="25"/>
-        <image name="profile" width="25" height="25"/>
+        <image name="feed" width="40" height="40"/>
+        <image name="plus" width="20" height="20"/>
+        <image name="profile" width="40" height="40"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="3eV-WI-cdJ"/>
+        <segue reference="l3M-gm-BZi"/>
         <segue reference="Ekb-P4-O0u"/>
     </inferredMetricsTieBreakers>
 </document>

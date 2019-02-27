@@ -2,8 +2,6 @@ import UIKit
 
 class FollowersTableViewController: UITableViewController {
     
-    @IBOutlet var followersTableView: UITableView!
-
     var followers: [User] = []
     var following: [User] = []
     var usersLikedPost: [User] = []
@@ -17,17 +15,15 @@ class FollowersTableViewController: UITableViewController {
         
         Spinner.start(from: (tabBarController?.view)!)
         
-        self.followersTableView.register(UINib(nibName: String(describing: FollowerTableViewCell.self), bundle: nil), forCellReuseIdentifier: String(describing: FollowerTableViewCell.self))
-        self.followersTableView.delegate = self
-        self.followersTableView.dataSource = self
+        tableView.register(UINib(nibName: String(describing: FollowerTableViewCell.self), bundle: nil), forCellReuseIdentifier: String(describing: FollowerTableViewCell.self))
         
         if entryPoint == "usersLikedPost" {
-            self.navigationItem.title = "Likes"
-            self.followersTableView.reloadData()
+            navigationItem.title = "Likes"
+            tableView.reloadData()
             Spinner.stop()
         }
         
-        if self.currentUser == nil {
+        if currentUser == nil {
             let currentUserRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.usersMe)
             UsersDataProvider.shared.getUserInfo(request: currentUserRequest, sender: self) { (user) in
                 self.currentUser = user
@@ -41,7 +37,7 @@ class FollowersTableViewController: UITableViewController {
                 UsersDataProvider.shared.userFollowers(request: followersRequest, sender: self) { (users) in
                     self.followers = users
                     self.navigationItem.title = "Followers"
-                    self.followersTableView.reloadData()
+                    self.tableView.reloadData()
                     Spinner.stop()
                 }
 
@@ -52,7 +48,7 @@ class FollowersTableViewController: UITableViewController {
                 UsersDataProvider.shared.userFollowers(request: followingRequest, sender: self) { (users) in
                     self.following = users
                     self.navigationItem.title = "Following"
-                    self.followersTableView.reloadData()
+                    self.tableView.reloadData()
                     Spinner.stop()
                 }
 
