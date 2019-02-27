@@ -12,9 +12,6 @@ class FeedTableViewCell: UITableViewCell {
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var descriptionLabel: UILabel!
     @IBOutlet weak var bigLikeImage: UIImageView!
-    
-    // Const variables
-    let defaultButtonColor = UIButton(type: UIButton.ButtonType.system).titleColor(for: .normal)
 
     // Data transfer variables
     var postID: String!
@@ -23,6 +20,8 @@ class FeedTableViewCell: UITableViewCell {
     var avatarUserId: String!
 
     weak var delegate: FeedTableViewController?
+    var presenter: FeedTableViewCellPresenter!
+    let defaultButtonColor = UIButton(type: UIButton.ButtonType.system).titleColor(for: .normal)
     
     // MARK: - Like / Dislike operations
     
@@ -34,51 +33,13 @@ class FeedTableViewCell: UITableViewCell {
             }
         } else {
             if currentUserLikesThisPost {
-                unlikePost()
+                presenter.unlikePost()
             } else {
-                likePost()
+                presenter.likePost()
             }
         }
     }
-    
-    public func likePost() {
-        
-        guard let delegate = delegate else { return }
 
-        let postIdJson = ["postID" : postID]
-        
-        let likePostRequest = RequestService.shared.createRequest(currentCase: .postsLike, caseJson: postIdJson as [String : Any])
-        PostsDataProvider.shared.setLikeToPost(request: likePostRequest, sender: delegate) { likedByCount in
-            self.numberOfLikesButton.setTitle("Likes: \(likedByCount)", for: .normal)
-            self.likeButton.tintColor = self.defaultButtonColor
-            self.currentUserLikesThisPost = true
-            self.updateLikeStatusInCoreData(likedByCount: likedByCount)
-        }
-
-    }
-    
-    public func unlikePost() {
-        
-        guard let delegate = delegate else { return }
-
-        let postIdJson = ["postID" : postID]
-        
-        let unlikePostRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsUnlike, caseJson: postIdJson as [String : Any])
-        PostsDataProvider.shared.setLikeToPost(request: unlikePostRequest, sender: delegate) { likedByCount in
-            self.numberOfLikesButton.setTitle("Likes: \(likedByCount)", for: .normal)
-            self.likeButton.tintColor = UIColor.lightGray
-            self.currentUserLikesThisPost = false
-            self.updateLikeStatusInCoreData(likedByCount: likedByCount)
-        }
-    }
-    
-    private func updateLikeStatusInCoreData(likedByCount: Int) {
-        DispatchQueue.global().async {
-            CoreDataManager.instance.updatePost(withID: self.postID, newIntValue: likedByCount, forKey: "likedByCount")
-            CoreDataManager.instance.updatePost(withID: self.postID, newValue: self.currentUserLikesThisPost, forKey: "currentUserLikesThisPost")
-        }
-    }
-    
     @objc func showBigLikeImage() {
         
         guard let delegate = delegate else { return }
@@ -95,9 +56,9 @@ class FeedTableViewCell: UITableViewCell {
             })
             
             if currentUserLikesThisPost {
-                unlikePost()
+                presenter.unlikePost()
             } else {
-                likePost()
+                presenter.likePost()
             }
         }
 
@@ -107,6 +68,8 @@ class FeedTableViewCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
+        
+        presenter = FeedCellPresenter(for: self)
         
         postImage.isUserInteractionEnabled = true
         avatarImage.isUserInteractionEnabled = true

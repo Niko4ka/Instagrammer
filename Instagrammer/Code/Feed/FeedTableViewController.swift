@@ -12,13 +12,13 @@ class FeedTableViewController: UITableViewController {
     var userID: String = ""
     var currentPost: Post!
     let decoder = JSONDecoder()
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-       tableView.register(UINib(nibName: String(describing: FeedTableViewCell.self), bundle: nil), forCellReuseIdentifier: String(describing: FeedTableViewCell.self))
+        
+        tableView.register(UINib(nibName: String(describing: FeedTableViewCell.self), bundle: nil), forCellReuseIdentifier: String(describing: FeedTableViewCell.self))
         tableView.separatorStyle = .none
-
+        
         Spinner.start(from: (tabBarController?.view)!)
         
         if AuthorizationDataProvider.shared.appIsInOfflineMode {
@@ -68,7 +68,7 @@ class FeedTableViewController: UITableViewController {
             self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
             self.view.layoutIfNeeded()
         }
-
+        
     }
     
     func showSpinnerCallback() {
@@ -84,7 +84,7 @@ class FeedTableViewController: UITableViewController {
             self.showUsers(users)
         })
     }
-
+    
     func showProfile(of userId: String) {
         
         RequestService.shared.userId = userId
@@ -106,17 +106,17 @@ class FeedTableViewController: UITableViewController {
         destination.entryPoint = "usersLikedPost"
         navigationController?.pushViewController(destination, animated: true)
     }
-
+    
     // MARK: - Table view data source
-
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }
-
+    
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return posts.count
     }
-
+    
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: FeedTableViewCell.self), for: indexPath) as! FeedTableViewCell
         cell.delegate = self
@@ -129,9 +129,9 @@ class FeedTableViewController: UITableViewController {
         
         return cell
     }
-
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         tableView.deselectRow(at: indexPath, animated: false)
     }
-
+    
 }
