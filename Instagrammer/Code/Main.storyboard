@@ -257,29 +257,6 @@
             </objects>
             <point key="canvasLocation" x="2177" y="578"/>
         </scene>
-        <!--Feed-->
-        <scene sceneID="rfp-K4-GXw">
-            <objects>
-                <tableViewController storyboardIdentifier="feedVC" id="GbC-1G-Uu4" customClass="FeedTableViewController" customModule="Instagrammer" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="mso-lb-Wf7">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="568"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <connections>
-                            <outlet property="dataSource" destination="GbC-1G-Uu4" id="ipJ-aB-ygQ"/>
-                            <outlet property="delegate" destination="GbC-1G-Uu4" id="kdg-x6-mlt"/>
-                        </connections>
-                    </tableView>
-                    <navigationItem key="navigationItem" title="Feed" id="S2c-hC-Kjo"/>
-                    <connections>
-                        <outlet property="feedTableView" destination="mso-lb-Wf7" id="XVJ-w1-gWN"/>
-                        <segue destination="ye3-Lv-4Ak" kind="show" identifier="showProfile" id="3eV-WI-cdJ"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="tlh-7e-hhF" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="2140" y="-392"/>
-        </scene>
         <!--Auth View Controller-->
         <scene sceneID="Ahk-fk-L1N">
             <objects>

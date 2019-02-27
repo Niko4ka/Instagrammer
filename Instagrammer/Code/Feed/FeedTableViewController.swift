@@ -4,22 +4,20 @@ import Kingfisher
 
 class FeedTableViewController: UITableViewController {
     
-    @IBOutlet weak var feedTableView: UITableView!
- 
-    var posts: [Any] = []
+    var posts: [Any] = [] {
+        didSet {
+            tableView.reloadData()
+        }
+    }
     var userID: String = ""
     var currentPost: Post!
-    var userForDestination: User?
-    var usersLikedCurrentPostForDestination: [User] = []
     let decoder = JSONDecoder()
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        self.feedTableView.register(UINib(nibName: String(describing: FeedTableViewCell.self), bundle: nil), forCellReuseIdentifier: String(describing: FeedTableViewCell.self))
-        self.feedTableView.delegate = self
-        self.feedTableView.dataSource = self
-        self.feedTableView.separatorStyle = .none
+       tableView.register(UINib(nibName: String(describing: FeedTableViewCell.self), bundle: nil), forCellReuseIdentifier: String(describing: FeedTableViewCell.self))
+        tableView.separatorStyle = .none
 
         Spinner.start(from: (tabBarController?.view)!)
         
@@ -38,7 +36,6 @@ class FeedTableViewController: UITableViewController {
             let feedRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsFeed)
             PostsDataProvider.shared.feed(request: feedRequest, sender: self) { (posts) in
                 self.posts = posts
-                self.feedTableView.reloadData()
                 Spinner.stop()
                 
                 // Save data to CoreData
@@ -58,7 +55,6 @@ class FeedTableViewController: UITableViewController {
         let reloadRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsFeed)
         PostsDataProvider.shared.feed(request: reloadRequest, sender: self) { (posts) in
             self.posts = posts
-            self.feedTableView.reloadData()
             Spinner.stop()
             
             // Update post data in CoreData
@@ -70,7 +66,7 @@ class FeedTableViewController: UITableViewController {
         
         if self.posts.count > 0 {
             let indexPath = IndexPath(row: 0, section: 0)
-            self.feedTableView.scrollToRow(at: indexPath, at: .top, animated: false)
+            self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
             self.view.layoutIfNeeded()
         }
 
@@ -84,8 +80,7 @@ class FeedTableViewController: UITableViewController {
         self.currentPost = cell.currentPost
         let usersLikePostRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsIdLikes)
         PostsDataProvider.shared.usersLikePost(request: usersLikePostRequest, sender: self, successCompletion: { (users) in
-            self.usersLikedCurrentPostForDestination = users
-            self.showUsersLikedPost()
+            self.showUsersLikedPost(users)
         })
     }
     
@@ -93,11 +88,28 @@ class FeedTableViewController: UITableViewController {
         
         let getUserRequest = RequestService.shared.createRequest(currentCase: .usersId)
         UsersDataProvider.shared.getUserInfo(request: getUserRequest, sender: self, successCompletion: { (user) in
-            
-            self.userForDestination = user
             Spinner.stop()
-            self.performSegue(withIdentifier: "showProfile", sender: nil)
+            self.showProfile(of: user)
         })
+    }
+    
+    // MARK: - Segues
+    
+    func showProfile(of user: User) {
+        
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let profile = storyboard.instantiateViewController(withIdentifier: "NewProfileViewController") as? NewProfileViewController {
+            profile.currentUser = user
+            navigationController?.pushViewController(profile, animated: true)
+        }
+        
+    }
+    
+    func showUsersLikedPost(_ users: [User]) {
+        let destination = FollowersTableViewController()
+        destination.usersLikedPost = users
+        destination.entryPoint = "usersLikedPost"
+        navigationController?.pushViewController(destination, animated: true)
     }
 
     // MARK: - Table view data source
@@ -111,7 +123,7 @@ class FeedTableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = feedTableView.dequeueReusableCell(withIdentifier: String(describing: FeedTableViewCell.self), for: indexPath) as! FeedTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: FeedTableViewCell.self), for: indexPath) as! FeedTableViewCell
         cell.delegate = self
         
         if AuthorizationDataProvider.shared.appIsInOfflineMode {
@@ -127,23 +139,4 @@ class FeedTableViewController: UITableViewController {
         tableView.deselectRow(at: indexPath, animated: false)
     }
 
-    // Prepare for segue
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-
-        if segue.identifier == "showProfile" {
-            if let destination = segue.destination as? NewProfileViewController {
-                            destination.currentUser = userForDestination
-                }
-        }
-    }
-    
-    func showUsersLikedPost() {
-        let destination = FollowersTableViewController()
-        destination.usersLikedPost = usersLikedCurrentPostForDestination
-        destination.entryPoint = "usersLikedPost"
-        navigationController?.pushViewController(destination, animated: true)
-    }
-    
-    
 }

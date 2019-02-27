@@ -7,7 +7,7 @@ class TabBarController: UITabBarController {
         
         let storyboard = UIStoryboard(name: "Main", bundle: nil)
         
-        let feed = storyboard.instantiateViewController(withIdentifier: "feedVC") as! FeedTableViewController
+        let feed = FeedTableViewController()
         let feedImage = UIImage(named: "feed")
         let feedNavigation = UINavigationController(rootViewController: feed)
         feedNavigation.tabBarItem = UITabBarItem(title: "Feed", image: feedImage, tag: 0)
