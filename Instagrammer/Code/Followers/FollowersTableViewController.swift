@@ -8,7 +8,6 @@ class FollowersTableViewController: UITableViewController {
     var entryPoint: String!
     var followerID: String!
     var currentUser: User?
-    var userForDestination: User?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -106,18 +105,18 @@ class FollowersTableViewController: UITableViewController {
         RequestService.shared.userId = cell?.followerID
         let followerRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.usersId)
         UsersDataProvider.shared.getUserInfo(request: followerRequest, sender: self) { (user) in
-            self.userForDestination = user
             Spinner.stop()
-            self.performSegue(withIdentifier: "showFollowerProfile", sender: nil)
+            self.showProfile(of: user)
         }
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        if segue.identifier == "showFollowerProfile" {
-            if let destination = segue.destination as? NewProfileViewController {
-                destination.currentUser = userForDestination
-            }
+    func showProfile(of follower: User) {
+        let storyboard = UIStoryboard(name: "Main", bundle: nil)
+        if let profile = storyboard.instantiateViewController(withIdentifier: "NewProfileViewController") as? NewProfileViewController {
+            profile.currentUser = follower
+            navigationController?.pushViewController(profile, animated: true)
         }
+        
     }
     
 }

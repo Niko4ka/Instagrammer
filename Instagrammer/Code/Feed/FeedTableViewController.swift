@@ -85,7 +85,7 @@ class FeedTableViewController: UITableViewController {
         let usersLikePostRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsIdLikes)
         PostsDataProvider.shared.usersLikePost(request: usersLikePostRequest, sender: self, successCompletion: { (users) in
             self.usersLikedCurrentPostForDestination = users
-            self.performSegue(withIdentifier: "showUsersLikedPost", sender: nil)
+            self.showUsersLikedPost()
         })
     }
     
@@ -131,20 +131,19 @@ class FeedTableViewController: UITableViewController {
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
-
         if segue.identifier == "showProfile" {
             if let destination = segue.destination as? NewProfileViewController {
                             destination.currentUser = userForDestination
                 }
         }
-        if segue.identifier == "showUsersLikedPost" {
-            if let destination = segue.destination as? FollowersTableViewController {
-                destination.usersLikedPost = usersLikedCurrentPostForDestination
-                destination.entryPoint = "usersLikedPost"
-            }
-        }
     }
     
+    func showUsersLikedPost() {
+        let destination = FollowersTableViewController()
+        destination.usersLikedPost = usersLikedCurrentPostForDestination
+        destination.entryPoint = "usersLikedPost"
+        navigationController?.pushViewController(destination, animated: true)
+    }
     
     
 }

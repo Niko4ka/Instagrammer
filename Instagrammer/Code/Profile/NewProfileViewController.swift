@@ -170,7 +170,7 @@ class NewProfileViewController: UIViewController {
         if AuthorizationDataProvider.shared.appIsInOfflineMode {
             Alert.showOfflineModeMessage(on: self)
         } else {
-            performSegue(withIdentifier: "showFollowers", sender: nil)
+            showFollowers(of: currentUser)
         }
         
     }
@@ -180,7 +180,7 @@ class NewProfileViewController: UIViewController {
         if AuthorizationDataProvider.shared.appIsInOfflineMode {
             Alert.showOfflineModeMessage(on: self)
         } else {
-            performSegue(withIdentifier: "showFollowing", sender: nil)
+            showFollowing(of: currentUser)
         }
     }
     
@@ -195,23 +195,19 @@ class NewProfileViewController: UIViewController {
             Spinner.stop()
         }
     }
-    
-    // MARK: - Prepare for segue
-    
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
 
-        if segue.identifier == "showFollowers" {
-            if let destination = segue.destination as? FollowersTableViewController {
-                destination.entryPoint = "followers"
-                destination.currentUser = self.currentUser
-            }
-        }
-        if segue.identifier == "showFollowing" {
-            if let destination = segue.destination as? FollowersTableViewController {
-                destination.entryPoint = "following"
-                destination.currentUser = self.currentUser
-            }
-        }
+    private func showFollowers(of user: User) {
+        let followers = FollowersTableViewController()
+        followers.entryPoint = "followers"
+        followers.currentUser = user
+        navigationController?.pushViewController(followers, animated: true)
+    }
+    
+    private func showFollowing(of user: User) {
+        let following = FollowersTableViewController()
+        following.entryPoint = "following"
+        following.currentUser = user
+        navigationController?.pushViewController(following, animated: true)
     }
     
 }

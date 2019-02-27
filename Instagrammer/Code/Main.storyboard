@@ -154,27 +154,10 @@
             </objects>
             <point key="canvasLocation" x="3321" y="1344"/>
         </scene>
-        <!--Followers Table View Controller-->
-        <scene sceneID="o9G-t5-tk8">
-            <objects>
-                <tableViewController storyboardIdentifier="FollowersTableViewController" id="4KU-mD-2RJ" customClass="FollowersTableViewController" customModule="Instagrammer" customModuleProvider="target" sceneMemberID="viewController">
-                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="hmf-Wv-hlt">
-                        <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                    </tableView>
-                    <connections>
-                        <segue destination="ye3-Lv-4Ak" kind="show" identifier="showFollowerProfile" id="l3M-gm-BZi"/>
-                    </connections>
-                </tableViewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="2sW-QT-ggI" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="3321" y="-188"/>
-        </scene>
         <!--New Profile View Controller-->
         <scene sceneID="rgF-EC-oaa">
             <objects>
-                <collectionViewController id="ye3-Lv-4Ak" customClass="NewProfileViewController" customModule="Instagrammer" customModuleProvider="target" sceneMemberID="viewController">
+                <collectionViewController storyboardIdentifier="NewProfileViewController" id="ye3-Lv-4Ak" customClass="NewProfileViewController" customModule="Instagrammer" customModuleProvider="target" sceneMemberID="viewController">
                     <collectionView key="view" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" dataMode="prototypes" id="4lR-0g-3Ft">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="455"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -268,8 +251,6 @@
                     <connections>
                         <outlet property="navigation" destination="y7l-1B-DFk" id="Fxc-2j-LPR"/>
                         <outlet property="postsCollectionView" destination="4lR-0g-3Ft" id="c2u-Td-oIG"/>
-                        <segue destination="4KU-mD-2RJ" kind="show" identifier="showFollowers" id="BMZ-rI-Vu3"/>
-                        <segue destination="4KU-mD-2RJ" kind="show" identifier="showFollowing" id="CBa-Dk-I5X"/>
                     </connections>
                 </collectionViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="aGz-hE-wK5" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -292,7 +273,6 @@
                     <navigationItem key="navigationItem" title="Feed" id="S2c-hC-Kjo"/>
                     <connections>
                         <outlet property="feedTableView" destination="mso-lb-Wf7" id="XVJ-w1-gWN"/>
-                        <segue destination="4KU-mD-2RJ" kind="show" identifier="showUsersLikedPost" id="Ekb-P4-O0u"/>
                         <segue destination="ye3-Lv-4Ak" kind="show" identifier="showProfile" id="3eV-WI-cdJ"/>
                     </connections>
                 </tableViewController>
@@ -456,6 +436,5 @@
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="3eV-WI-cdJ"/>
-        <segue reference="Ekb-P4-O0u"/>
     </inferredMetricsTieBreakers>
 </document>
