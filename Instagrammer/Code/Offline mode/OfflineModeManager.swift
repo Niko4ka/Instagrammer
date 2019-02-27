@@ -4,7 +4,6 @@ import CoreData
 final class OfflineModeManager {
     
     static let shared = OfflineModeManager()
-    private let context = CoreDataManager.instance.context
     
     public func createPostStorage(from posts: [Post]) {
         
