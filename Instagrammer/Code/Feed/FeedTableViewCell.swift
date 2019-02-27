@@ -21,32 +21,34 @@ class FeedTableViewCell: UITableViewCell {
     var currentUserLikesThisPost: Bool!
     var currentPost: Post!
     var avatarUserId: String!
-    var addPerformSegueAction: (()->())?
-    var addUsersLikedPostSegueAction: (()->())?
-    var showSpinnerCallback: (()->())?
-    var feedController: FeedTableViewController!
+
+    weak var delegate: FeedTableViewController?
     
     // MARK: - Like / Dislike operations
     
     @IBAction func likeButtonPressed(_ sender: Any) {
         
         if AuthorizationDataProvider.shared.appIsInOfflineMode {
-            Alert.showOfflineModeMessage(on: feedController)
+            if let delegate = delegate {
+                Alert.showOfflineModeMessage(on: delegate)
+            }
         } else {
-            if self.currentUserLikesThisPost {
-                self.unlikePost(self)
+            if currentUserLikesThisPost {
+                unlikePost(self)
             } else {
-                self.setLikeToPost(self)
+                setLikeToPost(self)
             }
         }
     }
     
     public func setLikeToPost(_ post: FeedTableViewCell) {
+        
+        guard let delegate = delegate else { return }
 
         let postIdJson = ["postID" : post.postID]
         
-        let likePostRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsLike, caseJson: postIdJson as [String : Any])
-        PostsDataProvider.shared.setLikeToPost(request: likePostRequest, sender: feedController) { likedByCount in
+        let likePostRequest = RequestService.shared.createRequest(currentCase: .postsLike, caseJson: postIdJson as [String : Any])
+        PostsDataProvider.shared.setLikeToPost(request: likePostRequest, sender: delegate) { likedByCount in
             post.numberOfLikesButton.setTitle("Likes: \(likedByCount)", for: .normal)
             post.likeButton.tintColor = self.defaultButtonColor
             self.currentUserLikesThisPost = true
@@ -60,11 +62,13 @@ class FeedTableViewCell: UITableViewCell {
     }
     
     public func unlikePost(_ post: FeedTableViewCell) {
+        
+        guard let delegate = delegate else { return }
 
         let postIdJson = ["postID" : post.postID]
         
         let unlikePostRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsUnlike, caseJson: postIdJson as [String : Any])
-        PostsDataProvider.shared.setLikeToPost(request: unlikePostRequest, sender: feedController) { likedByCount in
+        PostsDataProvider.shared.setLikeToPost(request: unlikePostRequest, sender: delegate) { likedByCount in
             post.numberOfLikesButton.setTitle("Likes: \(likedByCount)", for: .normal)
             post.likeButton.tintColor = UIColor.lightGray
             self.currentUserLikesThisPost = false
@@ -77,9 +81,11 @@ class FeedTableViewCell: UITableViewCell {
     }
     
     @objc func showBigLikeImage() {
+        
+        guard let delegate = delegate else { return }
 
         if AuthorizationDataProvider.shared.appIsInOfflineMode {
-            Alert.showOfflineModeMessage(on: feedController)
+            Alert.showOfflineModeMessage(on: delegate)
         } else {
             UIView.animate(withDuration: 0.1, delay: 0.0, options: [.curveLinear], animations: {
                 self.bigLikeImage.alpha = 1.0
@@ -89,10 +95,10 @@ class FeedTableViewCell: UITableViewCell {
                 }, completion: nil)
             })
             
-            if self.currentUserLikesThisPost {
-                self.unlikePost(self)
+            if currentUserLikesThisPost {
+                unlikePost(self)
             } else {
-                self.setLikeToPost(self)
+                setLikeToPost(self)
             }
         }
 
@@ -216,17 +222,19 @@ class FeedTableViewCell: UITableViewCell {
     
     @IBAction func toUserProfile() {
         
+        guard let delegate = delegate else { return }
+        
         if AuthorizationDataProvider.shared.appIsInOfflineMode {
-            Alert.showOfflineModeMessage(on: feedController)
+            Alert.showOfflineModeMessage(on: delegate)
         } else {
-            showSpinnerCallback?()
+            delegate.showSpinnerCallback()
             RequestService.shared.postId = postID
             
             let getPostRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsId)
-            PostsDataProvider.shared.getPostInfo(request: getPostRequest, sender: feedController) { (post) in
+            PostsDataProvider.shared.getPostInfo(request: getPostRequest, sender: delegate) { (post) in
                 RequestService.shared.userId = post.author
                 DispatchQueue.main.async {
-                    self.addPerformSegueAction?()
+                    self.delegate?.addPerformSegueAction()
                 }
             }
         }
@@ -235,18 +243,20 @@ class FeedTableViewCell: UITableViewCell {
     
     @IBAction func showUsersLikedPost(_ sender: UIButton) {
         
+        guard let delegate = delegate else { return }
+        
         if AuthorizationDataProvider.shared.appIsInOfflineMode {
-            Alert.showOfflineModeMessage(on: feedController)
+            Alert.showOfflineModeMessage(on: delegate)
         } else {
-            showSpinnerCallback?()
+            delegate.showSpinnerCallback()
             RequestService.shared.postId = postID
             
             let getPostRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsId, caseJson: nil)
-            PostsDataProvider.shared.getPostInfo(request: getPostRequest, sender: feedController) { (post) in
+            PostsDataProvider.shared.getPostInfo(request: getPostRequest, sender: delegate) { (post) in
                 RequestService.shared.userId = post.author
                 
                 DispatchQueue.main.async {
-                    self.addUsersLikedPostSegueAction?()
+                    delegate.addUsersLikedPostSegueAction(cell: self)
                 }
             }
         }

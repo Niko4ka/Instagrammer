@@ -73,9 +73,31 @@ class FeedTableViewController: UITableViewController {
             self.feedTableView.scrollToRow(at: indexPath, at: .top, animated: false)
             self.view.layoutIfNeeded()
         }
-        
-        
 
+    }
+    
+    func showSpinnerCallback() {
+        Spinner.start(from: (self.tabBarController?.view)!)
+    }
+    
+    func addUsersLikedPostSegueAction(cell: FeedTableViewCell) {
+        self.currentPost = cell.currentPost
+        let usersLikePostRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsIdLikes)
+        PostsDataProvider.shared.usersLikePost(request: usersLikePostRequest, sender: self, successCompletion: { (users) in
+            self.usersLikedCurrentPostForDestination = users
+            self.performSegue(withIdentifier: "showUsersLikedPost", sender: nil)
+        })
+    }
+    
+    func addPerformSegueAction() {
+        
+        let getUserRequest = RequestService.shared.createRequest(currentCase: .usersId)
+        UsersDataProvider.shared.getUserInfo(request: getUserRequest, sender: self, successCompletion: { (user) in
+            
+            self.userForDestination = user
+            Spinner.stop()
+            self.performSegue(withIdentifier: "showProfile", sender: nil)
+        })
     }
 
     // MARK: - Table view data source
@@ -90,37 +112,12 @@ class FeedTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = feedTableView.dequeueReusableCell(withIdentifier: String(describing: FeedTableViewCell.self), for: indexPath) as! FeedTableViewCell
+        cell.delegate = self
         
         if AuthorizationDataProvider.shared.appIsInOfflineMode {
             cell.setPostInFeed(posts[indexPath.item] as! PostEntity)
         } else {
             cell.setPostInFeed(posts[indexPath.item] as! Post)
-        }
-        
-        cell.feedController = self
-        
-        cell.showSpinnerCallback = {
-            Spinner.start(from: (self.tabBarController?.view)!)
-        }
-
-        cell.addPerformSegueAction = {
-
-            let getUserRequest = RequestService.shared.createRequest(currentCase: .usersId)
-            UsersDataProvider.shared.getUserInfo(request: getUserRequest, sender: self, successCompletion: { (user) in
-                
-                    self.userForDestination = user
-                    Spinner.stop()
-                    self.performSegue(withIdentifier: "showProfile", sender: nil)
-            })
-        }
-
-        cell.addUsersLikedPostSegueAction = {
-            self.currentPost = cell.currentPost
-            let usersLikePostRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsIdLikes)
-            PostsDataProvider.shared.usersLikePost(request: usersLikePostRequest, sender: self, successCompletion: { (users) in
-                self.usersLikedCurrentPostForDestination = users
-                self.performSegue(withIdentifier: "showUsersLikedPost", sender: nil)
-            })
         }
         
         return cell
