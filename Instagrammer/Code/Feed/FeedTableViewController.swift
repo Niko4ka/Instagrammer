@@ -101,9 +101,7 @@ class FeedTableViewController: UITableViewController {
     }
     
     func showUsers(_ users: [User]) {
-        let destination = FollowersTableViewController()
-        destination.usersLikedPost = users
-        destination.entryPoint = "usersLikedPost"
+        let destination = FollowersTableViewController(listType: .usersLikedPost, users: users)
         navigationController?.pushViewController(destination, animated: true)
     }
     

@@ -191,16 +191,12 @@ class ProfileViewController: UIViewController {
     }
 
     private func showFollowers(of user: User) {
-        let followers = FollowersTableViewController()
-        followers.entryPoint = "followers"
-        followers.currentUser = user
+        let followers = FollowersTableViewController(listType: .followers, currentUser: user)
         navigationController?.pushViewController(followers, animated: true)
     }
     
     private func showFollowing(of user: User) {
-        let following = FollowersTableViewController()
-        following.entryPoint = "following"
-        following.currentUser = user
+        let following = FollowersTableViewController(listType: .following, currentUser: user)
         navigationController?.pushViewController(following, animated: true)
     }
     
