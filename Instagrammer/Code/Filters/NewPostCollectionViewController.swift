@@ -26,7 +26,6 @@ class NewPostCollectionViewController: UICollectionViewController, UICollectionV
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueCell(of: NewPostCollectionViewCell.self, for: indexPath)
         cell.configureCellWith(photos[indexPath.item])
-
         return cell
     }
     
@@ -78,7 +77,6 @@ class NewPostCollectionViewController: UICollectionViewController, UICollectionV
             let imagePath = path + "/new"
             let url = NSURL(fileURLWithPath: imagePath)
             let fileManager = FileManager.default
-            
             let properties = [URLResourceKey.localizedNameKey,
                               URLResourceKey.creationDateKey,
                               URLResourceKey.localizedTypeDescriptionKey]

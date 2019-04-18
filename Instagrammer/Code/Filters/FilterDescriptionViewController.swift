@@ -24,7 +24,10 @@ class FilterDescriptionViewController: UIViewController {
                 return
             }
             
-            let json: [String: String] = ["image": imageString,"description": descriptionTextField.text ?? ""]
+            let json: [String: String] = [
+                "image": imageString,
+                "description": descriptionTextField.text ?? ""
+            ]
             
             let createPostRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsCreate, caseJson: json)
             PostsDataProvider.shared.getPostInfo(request: createPostRequest, sender: self) { (post) in
@@ -43,12 +46,11 @@ class FilterDescriptionViewController: UIViewController {
                 }
             }
         }
-        
     }
     
     private func convertImageToBase64String(image: UIImage) -> String? {
         let imageData = image.jpegData(compressionQuality: 1.0)?.base64EncodedString()
         return imageData
     }
-
+    
 }

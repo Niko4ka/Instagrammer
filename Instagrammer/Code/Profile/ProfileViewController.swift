@@ -29,14 +29,13 @@ class ProfileViewController: UIViewController {
         
         Spinner.start(from: (tabBarController?.view)!)
         
-        self.postsCollectionView.register(cellType: PostCollectionViewCell.self)
-        self.postsCollectionView.delegate = self
-        self.postsCollectionView.dataSource = self
+        postsCollectionView.register(cellType: PostCollectionViewCell.self)
+        postsCollectionView.delegate = self
+        postsCollectionView.dataSource = self
         
         if AuthorizationDataProvider.shared.appIsInOfflineMode {
             
             // Offline mode customization
-            
             guard let currentUserData = OfflineModeManager.shared.getCurrentUserData() else {
                 Alert.show(message: "Unknown error", on: self)
                 return
@@ -118,7 +117,6 @@ class ProfileViewController: UIViewController {
             logOutButton = UIBarButtonItem(title: "Log out", style: .plain, target: self, action: #selector(logOutButtonPressed(_:)))
             self.navigationItem.setRightBarButton(logOutButton, animated: false)
         }
-
         postsCollectionView.reloadData()
     }
     
@@ -171,7 +169,6 @@ class ProfileViewController: UIViewController {
         } else {
             showFollowers(of: currentUser)
         }
-        
     }
     
     func followingButtonPressed() {
@@ -183,12 +180,10 @@ class ProfileViewController: UIViewController {
         }
     }
     
-    
     @objc func logOutButtonPressed(_ sender: UIBarButtonItem) {
 
         let tokenRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.signout)
         AuthorizationDataProvider.shared.performSignout(request: tokenRequest, sender: self) {
-
             Spinner.start(from: (self.tabBarController?.view)!)
             AuthorizationDataProvider.showAuthScreen()
             Spinner.stop()

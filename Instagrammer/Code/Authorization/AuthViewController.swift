@@ -136,7 +136,7 @@ extension AuthViewController: UITextFieldDelegate {
                     }
                 }
             default:
-                ()
+                break
             }
         }
     }

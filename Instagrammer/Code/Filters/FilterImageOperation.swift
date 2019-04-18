@@ -2,11 +2,11 @@ import UIKit
 
 class FilterImageOperation: Operation {
     
-    private var inputImage: UIImage!
+    private var inputImage: UIImage
     private(set) var outputImage: UIImage!
-    private var chosenFilter: String!
+    private var chosenFilter: String
     
-    init(inputImage: UIImage?, chosenFilter: String) {
+    init(inputImage: UIImage, chosenFilter: String) {
         self.inputImage = inputImage
         self.chosenFilter = chosenFilter
     }

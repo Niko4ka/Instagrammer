@@ -24,8 +24,6 @@ class FiltersViewController: UIViewController {
         let flowLayout = UICollectionViewFlowLayout()
         flowLayout.scrollDirection = .horizontal
         filtersCollectionView.collectionViewLayout = flowLayout
-
-
     }
     
     // MARK: - Prepare thumbnail
@@ -60,14 +58,12 @@ extension FiltersViewController: UICollectionViewDelegate, UICollectionViewDataS
     // MARK: - UICollectionViewDataSource
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        
         return filterProvider.filterArray.count
-        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = filtersCollectionView.dequeueCell(of: FilterCollectionViewCell.self, for: indexPath)
+        let cell = collectionView.dequeueCell(of: FilterCollectionViewCell.self, for: indexPath)
         cell.filterImage.image = cellThumbnailPhoto
         cell.set(filter: filterProvider.filterArray[indexPath.item], toPhoto: cellThumbnailPhoto)
         return cell
@@ -80,14 +76,15 @@ extension FiltersViewController: UICollectionViewDelegate, UICollectionViewDataS
         Spinner.start(from: (tabBarController?.view)!)
         
         let queue = OperationQueue()
-        let cell = filtersCollectionView.cellForItem(at: indexPath) as? FilterCollectionViewCell
+        let cell = collectionView.cellForItem(at: indexPath) as? FilterCollectionViewCell
         
         if cachedImage == nil {
             cachedImage = filteredPhoto.image
         }
         
-        guard let chosenFilter = cell?.filterLabel.text else { return }
-        let operation = FilterImageOperation(inputImage: cachedImage, chosenFilter: chosenFilter)
+        guard let chosenFilter = cell?.filterLabel.text,
+            let inputImage = cachedImage else { return }
+        let operation = FilterImageOperation(inputImage: inputImage, chosenFilter: chosenFilter)
         
         operation.completionBlock = {
             DispatchQueue.main.async {
@@ -104,7 +101,7 @@ extension FiltersViewController: UICollectionViewDelegate, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let itemWidth: CGFloat = 120.0
-        let itemHeight = filtersCollectionView.frame.size.height
+        let itemHeight = collectionView.frame.size.height
         
         return CGSize(width: itemWidth, height: itemHeight)
     }
@@ -123,6 +120,5 @@ extension FiltersViewController: UICollectionViewDelegate, UICollectionViewDataS
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0.0
     }
-    
     
 }

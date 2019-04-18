@@ -120,7 +120,7 @@ class FeedTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: FeedTableViewCell.self), for: indexPath) as! FeedTableViewCell
         cell.delegate = self
-        
+
         if AuthorizationDataProvider.shared.appIsInOfflineMode {
             cell.setPostInFeed(posts[indexPath.item] as! PostEntity)
         } else {

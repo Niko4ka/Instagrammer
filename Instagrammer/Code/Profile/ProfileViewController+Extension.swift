@@ -18,7 +18,7 @@ extension ProfileViewController: UICollectionViewDataSource {
                         viewForSupplementaryElementOfKind kind: String,
                         at indexPath: IndexPath) -> UICollectionReusableView {
         
-        let header = postsCollectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "profileHeader", for: indexPath) as! HeaderCollectionReusableView
+        let header = collectionView.dequeueReusableSupplementaryView(ofKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: "profileHeader", for: indexPath) as! HeaderCollectionReusableView
         header.delegate = self
         self.header = header
         
@@ -72,21 +72,18 @@ extension ProfileViewController: UICollectionViewDataSource {
                 }
             }
         }
-        
         return header
     }
     
     func collectionView(_ collectionView: UICollectionView,
                         cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        let cell = postsCollectionView.dequeueCell(of: PostCollectionViewCell.self, for: indexPath)
-        
+        let cell = collectionView.dequeueCell(of: PostCollectionViewCell.self, for: indexPath)
         if AuthorizationDataProvider.shared.appIsInOfflineMode {
             cell.setPostImage(postsFromData[indexPath.item])
         } else {
             cell.setPostImage(posts[indexPath.item])
         }
-        
         return cell
     }
 }
@@ -96,7 +93,7 @@ extension ProfileViewController: UICollectionViewDataSource {
 extension ProfileViewController: UICollectionViewDelegate {
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        postsCollectionView.deselectItem(at: indexPath, animated: true)
+        collectionView.deselectItem(at: indexPath, animated: true)
     }
 }
 
@@ -107,7 +104,6 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
         let itemHeight = itemWidth
-        
         return CGSize(width: itemWidth, height: itemHeight)
     }
     
@@ -127,7 +123,6 @@ extension ProfileViewController: UICollectionViewDelegateFlowLayout {
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
-        
         return CGSize(width: UIScreen.main.bounds.width, height: 86.0)
     }
     
