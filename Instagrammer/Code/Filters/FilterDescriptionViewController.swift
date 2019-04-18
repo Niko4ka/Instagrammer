@@ -30,13 +30,13 @@ class FilterDescriptionViewController: UIViewController {
             ]
             
             let createPostRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsCreate, caseJson: json)
-            PostsDataProvider.shared.getPostInfo(request: createPostRequest, sender: self) { (post) in
+            PostsDataProvider.shared.getPostInfo(request: createPostRequest, sender: self) { [weak self] (post) in
                 
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadView"), object: nil, userInfo: nil)
                 
-                self.tabBarController?.selectedIndex = 0
+                self?.tabBarController?.selectedIndex = 0
                 
-                if let controllers = self.tabBarController?.viewControllers {
+                if let controllers = self?.tabBarController?.viewControllers {
                     for controller in controllers {
                         if controller.isKind(of: UINavigationController.self) {
                             let navController = controller as! UINavigationController

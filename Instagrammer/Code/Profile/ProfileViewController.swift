@@ -58,10 +58,10 @@ class ProfileViewController: UIViewController {
             
             if currentUser.id == loggedUserID {
                 let currentUserRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.usersMe)
-                UsersDataProvider.shared.getUserInfo(request: currentUserRequest, sender: self) { (user) in
-                    if self.currentUser.followedByCount != user.followedByCount || self.currentUser.followsCount != user.followsCount {
-                        self.currentUser = user
-                        self.postsCollectionView.reloadData()
+                UsersDataProvider.shared.getUserInfo(request: currentUserRequest, sender: self) { [weak self] (user) in
+                    if self?.currentUser.followedByCount != user.followedByCount || self?.currentUser.followsCount != user.followsCount {
+                        self?.currentUser = user
+                        self?.postsCollectionView.reloadData()
                     }
                 }
                 self.findPosts(userId: self.currentUser.id) {
@@ -76,23 +76,24 @@ class ProfileViewController: UIViewController {
         // Online mode customization
         
         let currentUserRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.usersMe)
-        UsersDataProvider.shared.getUserInfo(request: currentUserRequest, sender: self) { (user) in
+        UsersDataProvider.shared.getUserInfo(request: currentUserRequest, sender: self) { [weak self] (user) in
             
-            self.loggedUserID = user.id
-            if self.currentUser == nil {
-                self.currentUser = user
+            self?.loggedUserID = user.id
+            if self?.currentUser == nil {
+                self?.currentUser = user
             } else {
-                self.navigationItem.rightBarButtonItem = nil
+                self?.navigationItem.rightBarButtonItem = nil
             }
             
-            self.findPosts(userId: self.currentUser.id, successCompletion: {
-                self.showUI()
+            guard let currentUser = self?.currentUser,
+                let posts = self?.posts else { return }
+            
+            self?.findPosts(userId: currentUser.id, successCompletion: {
+                self?.showUI()
                 Spinner.stop()
-                self.viewNeedToReload = true
-                
-                if self.currentUser.id == self.loggedUserID {
-                    
-                    OfflineModeManager.shared.saveCurrentUser(from: self.currentUser, withPosts: self.posts)
+                self?.viewNeedToReload = true
+                if currentUser.id == self?.loggedUserID {
+                    OfflineModeManager.shared.saveCurrentUser(from: currentUser, withPosts: posts)
                 }
             })
         }
@@ -102,8 +103,8 @@ class ProfileViewController: UIViewController {
         RequestService.shared.userId = userId
         
         let findPostsRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.usersIdPosts)
-        UsersDataProvider.shared.userPosts(request: findPostsRequest, sender: self) { (posts) in
-                self.posts = posts
+        UsersDataProvider.shared.userPosts(request: findPostsRequest, sender: self) { [weak self] (posts) in
+                self?.posts = posts
                 successCompletion()
         }
     }
@@ -124,42 +125,42 @@ class ProfileViewController: UIViewController {
     
     func followThisUserButtonPressed() {
         
-            if currentUser.currentUserFollowsThisUser {
-                
-                let unfollowJson = ["userID": self.currentUser.id]
-                let unfollowRequest = RequestService.shared.createRequest(currentCase: .usersUnfollow, caseJson: unfollowJson)
-                UsersDataProvider.shared.getUserInfo(request: unfollowRequest, sender: self, successCompletion: { (user) in
-                    self.currentUser = user
-                    if let header = self.header {
-                        header.followThisUserButton.setTitle("Follow", for: .normal)
-                        header.followThisUserButton.sizeToFit()
-                        header.followersButton.setTitle("Followers: \(self.currentUser.followedByCount)", for: .normal)
-                    }
-                })
-                
-            } else {
-                let followJson = ["userID": self.currentUser.id]
-                let followRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.usersFollow, caseJson: followJson)
-                UsersDataProvider.shared.getUserInfo(request: followRequest, sender: self, successCompletion: { (user) in
-                    self.currentUser = user
-                    
-                    if let header = self.header {
-                        header.followThisUserButton.setTitle("Unfollow", for: .normal)
-                        header.followThisUserButton.sizeToFit()
-                        header.followersButton.setTitle("Followers: \(self.currentUser.followedByCount)", for: .normal)
-                    }
-                })
-            }
+        if currentUser.currentUserFollowsThisUser {
             
-            // Update data in CoreData
-            
-            let currentUserRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.usersMe)
-            UsersDataProvider.shared.getUserInfo(request: currentUserRequest, sender: self) { (user) in
-                DispatchQueue.global().async {
-                    CoreDataManager.instance.updateUser(withID: user.id, newValue: user.followedByCount, forKey: "followedByCount")
-                    CoreDataManager.instance.updateUser(withID: user.id, newValue: user.followsCount, forKey: "followsCount")
+            let unfollowJson = ["userID": self.currentUser.id]
+            let unfollowRequest = RequestService.shared.createRequest(currentCase: .usersUnfollow, caseJson: unfollowJson)
+            UsersDataProvider.shared.getUserInfo(request: unfollowRequest, sender: self, successCompletion: { [weak self] (user) in
+                self?.currentUser = user
+                if let header = self?.header,
+                    let followers = self?.currentUser.followedByCount {
+                    header.followThisUserButton.setTitle("Follow", for: .normal)
+                    header.followThisUserButton.sizeToFit()
+                    header.followersButton.setTitle("Followers: \(followers)", for: .normal)
                 }
+            })
+        } else {
+            let followJson = ["userID": self.currentUser.id]
+            let followRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.usersFollow, caseJson: followJson)
+            UsersDataProvider.shared.getUserInfo(request: followRequest, sender: self, successCompletion: { [weak self] (user) in
+                self?.currentUser = user
+                if let header = self?.header,
+                    let followers = self?.currentUser.followedByCount {
+                    header.followThisUserButton.setTitle("Unfollow", for: .normal)
+                    header.followThisUserButton.sizeToFit()
+                    header.followersButton.setTitle("Followers: \(followers)", for: .normal)
+                }
+            })
+        }
+        
+        // Update data in CoreData
+        
+        let currentUserRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.usersMe)
+        UsersDataProvider.shared.getUserInfo(request: currentUserRequest, sender: self) { (user) in
+            DispatchQueue.global().async {
+                CoreDataManager.instance.updateUser(withID: user.id, newValue: user.followedByCount, forKey: "followedByCount")
+                CoreDataManager.instance.updateUser(withID: user.id, newValue: user.followsCount, forKey: "followsCount")
             }
+        }
     }
     
     func followersButtonPressed() {
@@ -183,8 +184,8 @@ class ProfileViewController: UIViewController {
     @objc func logOutButtonPressed(_ sender: UIBarButtonItem) {
 
         let tokenRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.signout)
-        AuthorizationDataProvider.shared.performSignout(request: tokenRequest, sender: self) {
-            Spinner.start(from: (self.tabBarController?.view)!)
+        AuthorizationDataProvider.shared.performSignout(request: tokenRequest, sender: self) { [weak self] in
+            Spinner.start(from: (self?.tabBarController?.view)!)
             AuthorizationDataProvider.showAuthScreen()
             Spinner.stop()
         }

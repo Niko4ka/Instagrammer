@@ -195,11 +195,10 @@ class FeedTableViewCell: UITableViewCell {
             let getPostRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsId)
             PostsDataProvider.shared.getPostInfo(request: getPostRequest, sender: delegate) { (post) in
                 DispatchQueue.main.async {
-                    self.delegate?.showProfile(of: post.author)
+                    delegate.showProfile(of: post.author)
                 }
             }
         }
-
     }
     
     @IBAction func showUsersLikedPost(_ sender: UIButton) {
@@ -221,7 +220,5 @@ class FeedTableViewCell: UITableViewCell {
                 }
             }
         }
-
     }
-    
 }

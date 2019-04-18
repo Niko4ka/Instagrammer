@@ -29,19 +29,18 @@ class AuthViewController: UIViewController {
         let token = KeychainService.shared.readToken()
 
         if token != nil {
-            let tokenJson = ["token" : token]
-            let request = RequestService.shared.createRequest(currentCase: .checkToken, caseJson: tokenJson as [String : Any])
-            AuthorizationDataProvider.shared.checkToken(request: request, successCompletion: {
+            let tokenJson = ["token" : token as Any]
+            let request = RequestService.shared.createRequest(currentCase: .checkToken, caseJson: tokenJson)
+            AuthorizationDataProvider.shared.checkToken(request: request, successCompletion: { [weak self] in
                 print("Token exists")
                 RequestService.shared.userToken = token
                 Spinner.stop()
-                self.showTabBarController()
-                
+                self?.showTabBarController()
             }) {
                 print("Offline mode enabled.")
-                Alert.showOfflineModeMessage(on: self, handler: {
+                Alert.showOfflineModeMessage(on: self, handler: { [weak self] in
                     Spinner.stop()
-                    self.showTabBarController()
+                    self?.showTabBarController()
                 })
             }
         } else {
@@ -61,14 +60,13 @@ class AuthViewController: UIViewController {
         if let login = loginTextField.text, let password = passwordTextField.text {
             
             Spinner.start(from: self.view)
-            
             let signinJson = ["login" : login, "password" : password]
-            
             let request = RequestService.shared.createRequest(currentCase: .signin, caseJson: signinJson)
-            AuthorizationDataProvider.shared.performSignin(request: request, sender: self, successCompletion: { (token) in
+            
+            AuthorizationDataProvider.shared.performSignin(request: request, sender: self, successCompletion: { [weak self] (token) in
                 RequestService.shared.userToken = token
                 KeychainService.shared.saveToken(token: token)
-                self.showTabBarController()
+                self?.showTabBarController()
                 Spinner.stop()
             })
         }

@@ -33,42 +33,41 @@ class FeedTableViewController: UITableViewController {
             // Online mode customization
             
             let feedRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsFeed)
-            PostsDataProvider.shared.feed(request: feedRequest, sender: self) { (posts) in
-                self.posts = posts
+            PostsDataProvider.shared.feed(request: feedRequest, sender: self) { [weak self] (posts) in
+                self?.posts = posts
                 Spinner.stop()
                 
                 // Save data to CoreData
-                
                 DispatchQueue.global().async {
-                    OfflineModeManager.shared.createPostStorage(from: self.posts as! [Post])
+                    guard let postsToStore = self?.posts as? [Post] else { return }
+                    OfflineModeManager.shared.createPostStorage(from: postsToStore)
                 }
             }
             
             NotificationCenter.default.addObserver(self, selector: #selector(reloadView(notification:)), name: NSNotification.Name(rawValue: "reloadView"), object: nil)
         }
-        
     }
     
     @objc func reloadView(notification: NSNotification) {
         
         let reloadRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsFeed)
-        PostsDataProvider.shared.feed(request: reloadRequest, sender: self) { (posts) in
-            self.posts = posts
+        PostsDataProvider.shared.feed(request: reloadRequest, sender: self) { [weak self] (posts) in
+            self?.posts = posts
             Spinner.stop()
             
             // Update post data in CoreData
-            
             DispatchQueue.global().async {
-                OfflineModeManager.shared.updatePostStorage(with: self.posts as! [Post])
+                guard let postsToUpdate = self?.posts as? [Post] else { return }
+                OfflineModeManager.shared.updatePostStorage(with: postsToUpdate)
+            }
+            DispatchQueue.main.async {
+                if posts.count > 0 {
+                    let indexPath = IndexPath(row: 0, section: 0)
+                    self?.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
+                    self?.view.layoutIfNeeded()
+                }
             }
         }
-        
-        if self.posts.count > 0 {
-            let indexPath = IndexPath(row: 0, section: 0)
-            self.tableView.scrollToRow(at: indexPath, at: .top, animated: false)
-            self.view.layoutIfNeeded()
-        }
-        
     }
     
     func showSpinnerCallback() {
@@ -80,8 +79,8 @@ class FeedTableViewController: UITableViewController {
     func showUsersLikedPost(in cell: FeedTableViewCell) {
         self.currentPost = cell.currentPost
         let usersLikePostRequest = RequestService.shared.createRequest(currentCase: APIRequestCases.postsIdLikes)
-        PostsDataProvider.shared.usersLikePost(request: usersLikePostRequest, sender: self, successCompletion: { (users) in
-            self.showUsers(users)
+        PostsDataProvider.shared.usersLikePost(request: usersLikePostRequest, sender: self, successCompletion: { [weak self] (users) in
+            self?.showUsers(users)
         })
     }
     
@@ -90,12 +89,12 @@ class FeedTableViewController: UITableViewController {
         RequestService.shared.userId = userId
         
         let getUserRequest = RequestService.shared.createRequest(currentCase: .usersId)
-        UsersDataProvider.shared.getUserInfo(request: getUserRequest, sender: self, successCompletion: { (user) in
+        UsersDataProvider.shared.getUserInfo(request: getUserRequest, sender: self, successCompletion: { [weak self] (user) in
             Spinner.stop()
             let storyboard = UIStoryboard(name: "Main", bundle: nil)
             if let profile = storyboard.instantiateViewController(withIdentifier: "ProfileViewController") as? ProfileViewController {
                 profile.currentUser = user
-                self.navigationController?.pushViewController(profile, animated: true)
+                self?.navigationController?.pushViewController(profile, animated: true)
             }
         })
     }
